@@ -68,7 +68,7 @@ function Dashboard() {
           icon="💧"
         />
         <MetricCard 
-          title="Árboles Salva." 
+          title="Árboles Salvados." 
           value={data?.arbolesEquivalentes?.toFixed(2) || 0} 
           icon="🌳"
         />
