@@ -1,10 +1,13 @@
-import './App.css'
-import Alerts from './pages/Alerts'
+import { BrowserRouter } from 'react-router-dom';
+import Router from './router';
 
+// Wraps the app with BrowserRouter to enable client-side navigation.
 function App() {
   return (
-    <Alerts />
-  )
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
