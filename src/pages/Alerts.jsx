@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import AlertCard from '../components/alerts/AlertCard';
 import ResolveAlertModal from '../components/alerts/ResolveAlertModal';
 import Toast from '../components/alerts/Toast';
@@ -193,6 +194,9 @@ export default function Alerts() {
           <p className="page-subtitle">Gestiona eventos, prioridades y resolucion en tiempo real.</p>
         </div>
         <div className="alerts-header-actions">
+          <Link to="/" className="alerts-btn-secondary link-btn">
+            Volver al Inicio
+          </Link>
           <button className="alerts-btn-secondary" onClick={handleResolveVisible} disabled={isResolving || status === 'loading'}>
             Resolver visibles
           </button>
