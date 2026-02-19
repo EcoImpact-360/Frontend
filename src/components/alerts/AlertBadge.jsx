@@ -1,7 +1,7 @@
 import React from "react";
 
 const BADGE_STYLES = {
-  // Mapeamos tanto en minúsculas como en mayúsculas para evitar errores de conexión
+
   low: { background: "#E8F5E9", color: "#1B5E20", label: "Baja", icon: "ℹ️" },
   LOW: { background: "#E8F5E9", color: "#1B5E20", label: "Baja", icon: "ℹ️" },
   
@@ -11,12 +11,12 @@ const BADGE_STYLES = {
   high: { background: "#FFEBEE", color: "#B71C1C", label: "Alta", icon: "⚠️" },
   HIGH: { background: "#FFEBEE", color: "#B71C1C", label: "Alta", icon: "⚠️" },
   
-  // Caso por defecto para evitar que la app se rompa si llega un valor nulo
+
   default: { background: "#F3F4F6", color: "#374151", label: "Normal", icon: "🔔" }
 };
 
 export default function AlertBadge({ severity }) {
-  // Buscamos el estilo. Si el backend manda algo raro, usamos el estilo por defecto.
+
   const tone = BADGE_STYLES[severity] || BADGE_STYLES.default;
 
   return (
