@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { vi, test, expect } from "vitest";
 import { getAlerts, resolveAlert } from "../services/alertsApi";
 import { request } from "../services/apiClient";
 
@@ -11,7 +11,7 @@ test("getAlerts builds querystring and calls request with GET", async () => {
 
   await getAlerts({ severity: "high", page: 2 });
 
-  expect(request).toHaveBeenCalledWith("/api/alerts?severity=high&page=2", {
+  expect(request).toHaveBeenCalledWith("/api/v1/alerts/pending", {
     method: "GET",
   });
 });
@@ -21,7 +21,7 @@ test("resolveAlert calls request with PATCH and correct path", async () => {
 
   await resolveAlert("abc");
 
-  expect(request).toHaveBeenCalledWith("/api/alerts/abc/resolve", {
+  expect(request).toHaveBeenCalledWith("/api/v1/alerts/abc/resolve", {
     method: "PATCH",
   });
 });

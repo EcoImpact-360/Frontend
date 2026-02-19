@@ -37,7 +37,7 @@ function Dashboard() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <h1 style={{ margin: 0 }}>EcoImpact 360 - Dashboard</h1>
-          <p style={{ color: '#6b7280' }}>Datos reales desde el backend</p>
+          <p style={{ color: '#6b7280' }}>Datos en tiempo real</p>
         </div>
         <Link to="/" className="alerts-btn">Volver al Inicio</Link>
       </div>

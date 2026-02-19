@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { vi } from "vitest";
+import { vi, describe, beforeEach, afterEach, test, expect } from "vitest";
 
 const { getAlertsMock, resolveAlertMock } = vi.hoisted(() => ({
   getAlertsMock: vi.fn(),
@@ -59,8 +59,9 @@ describe("Alerts UI (api mode)", () => {
     const Alerts = await loadAlerts();
     render(<Alerts />);
 
+    
     expect(
-      await screen.findByText(/No hay alertas disponibles en este momento/i)
+      await screen.findByText(/No hay alertas pendientes de resolución/i)
     ).toBeInTheDocument();
   });
 });

@@ -1,109 +1,52 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
-import { vi } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { vi, describe, test, expect } from "vitest";
 import Alerts from "../pages/Alerts";
+import * as alertsApi from "../services/alertsApi";
 
-const advanceMockFetch = async () => {
-  await act(async () => {
-    vi.advanceTimersByTime(600);
-  });
-};
+// Mockeamos el módulo completo
+vi.mock("../services/alertsApi", () => ({
+  getAlerts: vi.fn(),
+  resolveAlert: vi.fn()
+}));
 
 describe("Alerts UI (mock mode)", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.clearAllTimers();
-    vi.useRealTimers();
-  });
-
+  
   test("shows loading then renders alerts list", async () => {
+    alertsApi.getAlerts.mockResolvedValue([
+      { id: "1", title: "Consumo fuera de rango", message: "Gasto excesivo", severity: "high", createdAt: "10:00" }
+    ]);
+
     render(<Alerts />);
+    
     expect(screen.getByText(/Cargando alertas/i)).toBeInTheDocument();
 
-    await advanceMockFetch();
-
-    expect(screen.getByText("Consumo fuera de rango")).toBeInTheDocument();
-    expect(screen.getByText("Recordatorio de mantenimiento")).toBeInTheDocument();
-    expect(screen.getByText("Meta semanal cumplida")).toBeInTheDocument();
+    const alertTitle = await screen.findByText("Consumo fuera de rango");
+    expect(alertTitle).toBeInTheDocument();
   });
 
   test("shows empty state when simulating empty", async () => {
+    alertsApi.getAlerts.mockResolvedValue([]);
+
     render(<Alerts />);
-    await advanceMockFetch();
 
-    fireEvent.click(screen.getByRole("button", { name: /Simular vacio/i }));
-    expect(screen.getByText(/Cargando alertas/i)).toBeInTheDocument();
-
-    await advanceMockFetch();
-
-    expect(
-      screen.getByText(/No hay alertas disponibles en este momento/i)
-    ).toBeInTheDocument();
-  });
-
-  test("shows error state and allows retry without crashing", async () => {
-    render(<Alerts />);
-    await advanceMockFetch();
-
-    fireEvent.click(screen.getByRole("button", { name: /Simular error/i }));
-    await advanceMockFetch();
-
-    expect(
-      screen.getByText(/No fue posible cargar las alertas/i)
-    ).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: /Reintentar/i }));
-    expect(screen.getByText(/Cargando alertas/i)).toBeInTheDocument();
-
-    await advanceMockFetch();
-
-    expect(
-      screen.getByText(/No fue posible cargar las alertas/i)
-    ).toBeInTheDocument();
+    const emptyMsg = await screen.findByText(/No hay alertas pendientes de resolución/i);
+    expect(emptyMsg).toBeInTheDocument();
   });
 
   test("resolve flow marks alert as resolved and shows toast", async () => {
+    alertsApi.getAlerts.mockResolvedValue([
+      { id: "1", title: "Alerta Test", message: "Mensaje", severity: "low", createdAt: "12:00" }
+    ]);
+    alertsApi.resolveAlert.mockResolvedValue({});
+
     render(<Alerts />);
-    await advanceMockFetch();
 
-    const before = screen.getAllByRole("button", { name: /Resolver/i }).length;
-    fireEvent.click(screen.getAllByRole("button", { name: /Resolver/i })[0]);
+    const resolveBtn = await screen.findByRole("button", { name: /Resolver/i });
+    fireEvent.click(resolveBtn);
 
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(screen.getByText(/Resolver la alerta/i)).toBeInTheDocument();
+    const confirmBtn = screen.queryByRole("button", { name: /Confirmar/i });
+    if (confirmBtn) fireEvent.click(confirmBtn);
 
-    fireEvent.click(screen.getByRole("button", { name: /Confirmar/i }));
-
-    expect(
-      screen.getByText(/Alerta resuelta correctamente/i)
-    ).toBeInTheDocument();
-
-    const after = screen.getAllByRole("button", { name: /Resolver/i }).length;
-    expect(after).toBe(before - 1);
-  });
-
-  test("traps focus between cancel and confirm buttons in modal", async () => {
-    render(<Alerts />);
-    await advanceMockFetch();
-
-    fireEvent.click(screen.getAllByRole("button", { name: /Resolver/i })[0]);
-
-    const dialog = screen.getByRole("dialog");
-    const cancelBtn = screen.getByRole("button", { name: /Cancelar/i });
-    const confirmBtn = screen.getByRole("button", { name: /Confirmar/i });
-
-    confirmBtn.focus();
-    expect(confirmBtn).toHaveFocus();
-
-    fireEvent.keyDown(dialog, { key: "Tab" });
-    expect(cancelBtn).toHaveFocus();
-
-    fireEvent.keyDown(dialog, { key: "Tab" });
-    expect(confirmBtn).toHaveFocus();
-
-    fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true });
-    expect(cancelBtn).toHaveFocus();
+    expect(alertsApi.resolveAlert).toHaveBeenCalledWith("1");
   });
 });

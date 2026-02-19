@@ -1,5 +1,5 @@
 import { request } from "../services/apiClient";
-import { vi } from "vitest";
+import { vi, beforeEach, test, expect } from "vitest";
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -71,11 +71,15 @@ test("sends JSON body with Content-Type", async () => {
   await request("/api/x", { method: "POST", body: { hello: "world" } });
 
   expect(global.fetch).toHaveBeenCalledWith(
-    "/api/x",
+    "http://localhost:8080/api/v1/api/x",
     expect.objectContaining({
       method: "POST",
-      headers: expect.objectContaining({ "Content-Type": "application/json" }),
+      headers: expect.objectContaining({ 
+        "Content-Type": "application/json",
+        "Accept": "application/json" 
+      }),
       body: JSON.stringify({ hello: "world" }),
+      signal: expect.any(AbortSignal) 
     })
   );
 });
