@@ -1,3 +1,5 @@
+import { API_URL } from "../composables/apiConfig";
+
 const DEFAULT_TIMEOUT_MS = 10000;
 
 function normalizeError(err, context) {
@@ -39,7 +41,7 @@ export async function request(path, options = {}) {
     timeout = DEFAULT_TIMEOUT_MS,
   } = options;
 
-  const url = path;
+  const url = `${API_URL}${path}`;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 

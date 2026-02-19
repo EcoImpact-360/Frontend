@@ -15,27 +15,16 @@ function MetricCard({ title, value, type = 'number', icon, trend }) {
   };
 
   return (
-    <div style={{
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      padding: '1.5rem',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '0.5rem'
-    }}>
-      <span style={{ color: '#666', fontSize: '0.875rem' }}>{title}</span>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+    <div className="metric-card">
+      <span className="metric-title">{title}</span>
+      <div className="metric-value-container">
+        <span className="metric-value">
           {formatValue()}
         </span>
-        {icon && <span style={{ fontSize: '1.5rem' }}>{icon}</span>}
+        {icon && <span className="metric-icon">{icon}</span>}
       </div>
       {trend !== undefined && (
-        <span style={{
-          color: trend >= 0 ? '#22c55e' : '#ef4444',
-          fontSize: '0.875rem'
-        }}>
+        <span className={`metric-trend ${trend >= 0 ? 'trend-up' : 'trend-down'}`}>
           {trend >= 0 ? '↑' : '↓'} {Math.abs(trend)}%
         </span>
       )}

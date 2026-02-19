@@ -6,7 +6,10 @@
       "role": "gestor_limpieza",
       "email": "juan@colegio.com",
       "password": "hashed_password_example",
-      "assigned_sections": ["aula1", "aula2"]
+      "assigned_sections": [
+        "aula1",
+        "aula2"
+      ]
     },
     {
       "id": 2,
@@ -14,7 +17,9 @@
       "role": "gestor_limpieza",
       "email": "maria@colegio.com",
       "password": "hashed_password_example",
-      "assigned_sections": ["aula3"]
+      "assigned_sections": [
+        "aula3"
+      ]
     }
   ],
   "aulas": [
@@ -22,11 +27,31 @@
       "id": 1,
       "name": "Aula 1",
       "cubos_por_dia": [
-        { "dia": "lunes", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "martes", "cubos_basura": 4, "cubos_reciclables": 2 },
-        { "dia": "miércoles", "cubos_basura": 6, "cubos_reciclables": 4 },
-        { "dia": "jueves", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "viernes", "cubos_basura": 7, "cubos_reciclables": 5 }
+        {
+          "dia": "lunes",
+          "cubos_basura": 5,
+          "cubos_reciclables": 3
+        },
+        {
+          "dia": "martes",
+          "cubos_basura": 4,
+          "cubos_reciclables": 2
+        },
+        {
+          "dia": "miércoles",
+          "cubos_basura": 6,
+          "cubos_reciclables": 4
+        },
+        {
+          "dia": "jueves",
+          "cubos_basura": 5,
+          "cubos_reciclables": 3
+        },
+        {
+          "dia": "viernes",
+          "cubos_basura": 7,
+          "cubos_reciclables": 5
+        }
       ],
       "total_cubos_semana": 39,
       "gestor_id": 1
@@ -35,11 +60,31 @@
       "id": 2,
       "name": "Aula 2",
       "cubos_por_dia": [
-        { "dia": "lunes", "cubos_basura": 3, "cubos_reciclables": 2 },
-        { "dia": "martes", "cubos_basura": 4, "cubos_reciclables": 1 },
-        { "dia": "miércoles", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "jueves", "cubos_basura": 2, "cubos_reciclables": 2 },
-        { "dia": "viernes", "cubos_basura": 4, "cubos_reciclables": 2 }
+        {
+          "dia": "lunes",
+          "cubos_basura": 3,
+          "cubos_reciclables": 2
+        },
+        {
+          "dia": "martes",
+          "cubos_basura": 4,
+          "cubos_reciclables": 1
+        },
+        {
+          "dia": "miércoles",
+          "cubos_basura": 5,
+          "cubos_reciclables": 3
+        },
+        {
+          "dia": "jueves",
+          "cubos_basura": 2,
+          "cubos_reciclables": 2
+        },
+        {
+          "dia": "viernes",
+          "cubos_basura": 4,
+          "cubos_reciclables": 2
+        }
       ],
       "total_cubos_semana": 28,
       "gestor_id": 1
@@ -48,29 +93,94 @@
       "id": 3,
       "name": "Aula 3",
       "cubos_por_dia": [
-        { "dia": "lunes", "cubos_basura": 6, "cubos_reciclables": 4 },
-        { "dia": "martes", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "miércoles", "cubos_basura": 7, "cubos_reciclables": 5 },
-        { "dia": "jueves", "cubos_basura": 4, "cubos_reciclables": 2 },
-        { "dia": "viernes", "cubos_basura": 8, "cubos_reciclables": 6 }
+        {
+          "dia": "lunes",
+          "cubos_basura": 6,
+          "cubos_reciclables": 4
+        },
+        {
+          "dia": "martes",
+          "cubos_basura": 5,
+          "cubos_reciclables": 3
+        },
+        {
+          "dia": "miércoles",
+          "cubos_basura": 7,
+          "cubos_reciclables": 5
+        },
+        {
+          "dia": "jueves",
+          "cubos_basura": 4,
+          "cubos_reciclables": 2
+        },
+        {
+          "dia": "viernes",
+          "cubos_basura": 8,
+          "cubos_reciclables": 6
+        }
       ],
       "total_cubos_semana": 50,
       "gestor_id": 2
+    },
+    {
+      "name": "AU-1",
+      "cubos_por_dia": [
+        {
+          "dia": "lunes",
+          "cubos_basura": 7,
+          "cubos_reciclables": 0
+        },
+        {
+          "dia": "martes",
+          "cubos_basura": 0,
+          "cubos_reciclables": 0
+        },
+        {
+          "dia": "miércoles",
+          "cubos_basura": 0,
+          "cubos_reciclables": 0
+        },
+        {
+          "dia": "jueves",
+          "cubos_basura": 0,
+          "cubos_reciclables": 0
+        },
+        {
+          "dia": "viernes",
+          "cubos_basura": 0,
+          "cubos_reciclables": 0
+        }
+      ],
+      "gestor_id": null,
+      "total_cubos_semana": 0,
+      "id": 1771525710853
     }
   ],
   "contenedores": [
     {
-      "id": 1,
       "name": "Contenedor Reciclable Principal",
       "ubicacion": "Patio Central",
-      "capacidad_max": 500,
+      "capacidad_max": 50,
+      "nivel_actual": 2,
       "depositos_por_aula": [
-        { "aula_id": 1, "dia": "lunes", "cubos_depositados": 3 },
-        { "aula_id": 1, "dia": "martes", "cubos_depositados": 2 },
-        { "aula_id": 2, "dia": "lunes", "cubos_depositados": 2 }
+        {
+          "aula_id": 1,
+          "dia": "lunes",
+          "cubos_depositados": 3
+        },
+        {
+          "aula_id": 1,
+          "dia": "martes",
+          "cubos_depositados": 2
+        },
+        {
+          "aula_id": 2,
+          "dia": "lunes",
+          "cubos_depositados": 2
+        }
       ],
-      "nivel_actual": 250,
-      "ultima_vaciada": "2026-02-18"
+      "ultima_vaciada": "2026-02-18",
+      "id": 1
     },
     {
       "id": 2,
@@ -78,11 +188,37 @@
       "ubicacion": "Zona Norte",
       "capacidad_max": 300,
       "depositos_por_aula": [
-        { "aula_id": 3, "dia": "lunes", "cubos_depositados": 4 },
-        { "aula_id": 3, "dia": "martes", "cubos_depositados": 3 }
+        {
+          "aula_id": 3,
+          "dia": "lunes",
+          "cubos_depositados": 4
+        },
+        {
+          "aula_id": 3,
+          "dia": "martes",
+          "cubos_depositados": 3
+        }
       ],
       "nivel_actual": 150,
       "ultima_vaciada": "2026-02-17"
+    },
+    {
+      "name": "",
+      "ubicacion": "sala1",
+      "capacidad_max": 500,
+      "nivel_actual": 0,
+      "depositos_por_aula": [],
+      "ultima_vaciada": "2026-02-19",
+      "id": 1771525739062
+    },
+    {
+      "name": "parque ",
+      "ubicacion": "sala1",
+      "capacidad_max": 500,
+      "nivel_actual": 0,
+      "depositos_por_aula": [],
+      "ultima_vaciada": "2026-02-19",
+      "id": 1771526123656
     }
   ],
   "alerts": [
@@ -92,7 +228,7 @@
       "message": "El consumo energetico supero el umbral esperado esta manana.",
       "severity": "high",
       "createdAt": "Hoy, 08:45",
-      "resolved": false
+      "resolved": true
     },
     {
       "id": "a2",
@@ -100,7 +236,7 @@
       "message": "Se acerca la fecha de revision preventiva del sistema HVAC.",
       "severity": "medium",
       "createdAt": "Ayer, 17:10",
-      "resolved": false
+      "resolved": true
     },
     {
       "id": "a3",
