@@ -1,0 +1,103 @@
+{
+    "wastes": [
+        {
+            "id": 1,
+            "title": "Residuos Plásticos PET",
+            "body": "Botellas de plástico recolectadas en el área administrativa. Aproximadamente 50kg.",
+            "userId": 1,
+            "createdAt": "2024-02-15T10:30:00.000Z"
+        },
+        {
+            "id": 2,
+            "title": "Residuos Orgánicos",
+            "body": "Restos de comida del comedor. Se destinará a compostaje.",
+            "userId": 2,
+            "createdAt": "2024-02-15T11:45:00.000Z"
+        },
+        {
+            "id": 3,
+            "title": "Papel y Cartón",
+            "body": "Documentos antiguos y cajas de embalaje para reciclaje.",
+            "userId": 1,
+            "createdAt": "2024-02-15T14:20:00.000Z"
+        },
+        {
+            "id": 4,
+            "title": "Residuos Electrónicos",
+            "body": "Equipos informáticos obsoletos: 3 monitores, 5 teclados, cables varios.",
+            "userId": 3,
+            "createdAt": "2024-02-16T09:15:00.000Z"
+        },
+        {
+            "id": 5,
+            "title": "Vidrio",
+            "body": "Botellas y envases de vidrio del área de cafetería.",
+            "userId": 2,
+            "createdAt": "2024-02-16T16:00:00.000Z"
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "name": "Carlos Méndez",
+            "email": "carlos.mendez@empresa.com",
+            "role": "Supervisor de Limpieza"
+        },
+        {
+            "id": 2,
+            "name": "Ana García",
+            "email": "ana.garcia@empresa.com",
+            "role": "Coordinadora Ambiental"
+        },
+        {
+            "id": 3,
+            "name": "Luis Rodríguez",
+            "email": "luis.rodriguez@empresa.com",
+            "role": "Técnico IT"
+        },
+        {
+            "id": 4,
+            "name": "María Torres",
+            "email": "maria.torres@empresa.com",
+            "role": "Auxiliar de Servicios"
+        },
+        {
+            "id": 5,
+            "name": "Pedro Sánchez",
+            "email": "pedro.sanchez@empresa.com",
+            "role": "Jefe de Mantenimiento"
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "name": "Plásticos",
+            "color": "#2196F3",
+            "icon": "♻️"
+        },
+        {
+            "id": 2,
+            "name": "Orgánicos",
+            "color": "#4CAF50",
+            "icon": "🌱"
+        },
+        {
+            "id": 3,
+            "name": "Papel y Cartón",
+            "color": "#FF9800",
+            "icon": "📄"
+        },
+        {
+            "id": 4,
+            "name": "Electrónicos",
+            "color": "#9C27B0",
+            "icon": "💻"
+        },
+        {
+            "id": 5,
+            "name": "Vidrio",
+            "color": "#00BCD4",
+            "icon": "🍾"
+        }
+    ]
+}

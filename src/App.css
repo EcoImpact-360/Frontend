@@ -1,0 +1,858 @@
+/* ===== FUENTES ===== */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+
+/* ===== VARIABLES ===== */
+:root {
+    --cyan: #00e5ff;
+    --cyan-dim: #00bcd4;
+    --purple: #7c4dff;
+    --bg-deep: #060612;
+    --bg-card: rgba(14, 16, 40, 0.85);
+    --bg-card2: rgba(10, 12, 32, 0.9);
+    --border: rgba(0, 229, 255, 0.15);
+    --border-hover: rgba(0, 229, 255, 0.4);
+    --text: #cdd6f4;
+    --text-dim: #7a8ab0;
+    --red: #ff5370;
+    --red-dim: rgba(255, 83, 112, 0.12);
+}
+
+/* ===== RESET & BASE ===== */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text);
+    min-height: 100vh;
+    /* Fondo con textura de puntos */
+    background-image:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(124, 77, 255, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(0, 188, 212, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
+    background-size: auto, auto, 32px 32px;
+}
+
+/* ===== HEADER ===== */
+header,
+.header {
+    position: relative;
+    padding: 3rem 2rem 3.5rem;
+    text-align: center;
+    overflow: hidden;
+    background: linear-gradient(180deg,
+            rgba(7, 5, 25, 0.95) 0%,
+            rgba(13, 10, 45, 0.9) 100%);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Orbes de fondo del header */
+header::before,
+.header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 80% at 50% 120%, rgba(0, 229, 255, 0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 50%, rgba(124, 77, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 90% 50%, rgba(0, 188, 212, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* Línea inferior animada */
+header::after,
+.header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--purple) 25%,
+            var(--cyan) 50%,
+            var(--purple) 75%,
+            transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer-line 4s linear infinite;
+}
+
+@keyframes shimmer-line {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+header h1,
+.header h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    /* Efecto de texto con gradiente */
+    background: linear-gradient(135deg, #ffffff 30%, var(--cyan) 70%, var(--purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.4));
+}
+
+header p,
+.header p,
+.subtitle {
+    position: relative;
+    z-index: 1;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-top: 0.6rem;
+    letter-spacing: 0.4px;
+    font-weight: 300;
+}
+
+/* ===== MAIN LAYOUT ===== */
+main,
+.main-content,
+.container {
+    max-width: 1300px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+}
+
+.lista-section,
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* ===== CARDS — GLASSMORPHISM PREMIUM ===== */
+.card,
+.panel,
+section {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 2rem 2rem 2.2rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    overflow: hidden;
+    transition:
+        transform 0.4s cubic-bezier(.22, .61, .36, 1),
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
+
+    /* Sombra multicapa */
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.06) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.4) inset,
+        0 4px 6px rgba(0, 0, 0, 0.3),
+        0 12px 40px rgba(0, 0, 0, 0.5),
+        0 0 0 0 rgba(0, 229, 255, 0);
+}
+
+/* Gradiente interior sutil */
+.card::before,
+section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg,
+            rgba(255, 255, 255, 0.04) 0%,
+            transparent 40%,
+            rgba(0, 229, 255, 0.02) 100%);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* Línea superior brillante */
+.card::after,
+section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(0, 229, 255, 0.7) 40%,
+            rgba(124, 77, 255, 0.5) 60%,
+            transparent);
+    border-radius: 1px;
+}
+
+/* Orbe decorativo en esquina */
+.card .orb,
+section .orb {
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle,
+            rgba(0, 229, 255, 0.08) 0%,
+            transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+.card:hover,
+section:hover {
+    transform: translateY(-6px) scale(1.005);
+    border-color: var(--border-hover);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.4) inset,
+        0 8px 16px rgba(0, 0, 0, 0.4),
+        0 24px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(0, 229, 255, 0.08),
+        0 0 0 1px rgba(0, 229, 255, 0.12);
+}
+
+/* ===== TÍTULOS H2 ===== */
+h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 1.6rem;
+    padding-bottom: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.12);
+}
+
+/* Barra de acento inferior del h2 */
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--cyan);
+}
+
+/* ===== FORMULARIO ===== */
+.form-group,
+.field {
+    margin-bottom: 0.85rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Label compacto con puntito decorativo */
+label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--cyan-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 0.3rem;
+    opacity: 0.85;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+label::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--cyan);
+    flex-shrink: 0;
+}
+
+/* Label se ilumina al hacer focus */
+.form-group:focus-within label,
+.field:focus-within label {
+    opacity: 1;
+    color: var(--cyan);
+}
+
+.form-group:focus-within label::before,
+.field:focus-within label::before {
+    box-shadow: 0 0 10px var(--cyan);
+}
+
+/* ===== INPUTS BASE ===== */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    background: rgba(20, 24, 55, 0.9);
+    border: 1.5px solid rgba(0, 229, 255, 0.28);
+    border-bottom: 2px solid rgba(0, 229, 255, 0.5);
+    border-radius: 10px;
+    color: #e8eeff;
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+    transition: all 0.25s ease;
+    outline: none;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.04) inset,
+        0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+input[type="text"]:hover,
+input[type="number"]:hover,
+input[type="email"]:hover,
+textarea:hover,
+select:hover {
+    border-color: rgba(0, 229, 255, 0.45);
+    border-bottom-color: rgba(0, 229, 255, 0.7);
+    background: rgba(22, 28, 62, 0.95);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: rgba(0, 229, 255, 0.6);
+    border-bottom-color: var(--cyan);
+    background: rgba(10, 30, 50, 0.95);
+    color: #ffffff;
+    box-shadow:
+        0 0 0 3px rgba(0, 229, 255, 0.1),
+        0 0 16px rgba(0, 229, 255, 0.12),
+        0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: rgba(180, 200, 230, 0.3);
+    font-size: 0.88rem;
+    font-style: italic;
+    font-weight: 300;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+}
+
+select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2300e5ff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    padding-right: 2.2rem;
+}
+
+select option {
+    background: #0d1030;
+    color: #e8eeff;
+    padding: 0.5rem;
+}
+
+/* ===== BOTÓN REGISTRAR (pequeño y elegante) ===== */
+button[type="submit"],
+.btn-primary,
+button.registrar,
+input[type="submit"] {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.3rem;
+    background: linear-gradient(135deg, #006064, var(--cyan-dim));
+    color: #e0f7fa;
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 0.4rem;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    box-shadow:
+        0 0 0 0 rgba(0, 229, 255, 0),
+        0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Efecto shimmer en hover */
+button[type="submit"]::after,
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.12) 50%,
+            transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+button[type="submit"]:hover::after,
+.btn-primary:hover::after {
+    transform: translateX(100%);
+}
+
+button[type="submit"]:hover,
+.btn-primary:hover {
+    background: linear-gradient(135deg, #00838f, #26c6da);
+    border-color: var(--cyan);
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 16px rgba(0, 229, 255, 0.25),
+        0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+button[type="submit"]:active,
+.btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== TABLA ===== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 0.5rem;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+thead tr {
+    background: linear-gradient(90deg,
+            rgba(0, 60, 70, 0.9),
+            rgba(0, 120, 140, 0.7));
+    border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+thead th {
+    padding: 0.9rem 1.1rem;
+    text-align: left;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(0, 229, 255, 0.8);
+}
+
+tbody tr {
+    background: rgba(255, 255, 255, 0.015);
+    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: rgba(0, 229, 255, 0.05);
+}
+
+tbody td {
+    padding: 0.9rem 1.1rem;
+    font-size: 0.87rem;
+    color: var(--text-dim);
+    vertical-align: middle;
+    line-height: 1.5;
+}
+
+/* ID */
+tbody td:first-child {
+    color: var(--cyan);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+/* Título */
+tbody td:nth-child(2) {
+    font-weight: 500;
+    color: #dde4f0;
+    font-size: 0.88rem;
+}
+
+/* Usuario */
+tbody td:nth-child(4) {
+    color: #90caf9;
+    font-size: 0.8rem;
+}
+
+/* Columna acciones centrada */
+tbody td:last-child {
+    text-align: center;
+}
+
+/* ===== BOTÓN ELIMINAR (pequeño) ===== */
+.btn-delete,
+button.eliminar,
+td button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--red-dim);
+    color: #ff8a95;
+    border: 1px solid rgba(255, 83, 112, 0.25);
+    padding: 0.32rem 0.72rem;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+}
+
+.btn-delete:hover,
+button.eliminar:hover,
+td button:hover {
+    background: rgba(255, 83, 112, 0.22);
+    border-color: var(--red);
+    color: #ff6b80;
+    transform: scale(1.06);
+    box-shadow: 0 0 14px rgba(255, 83, 112, 0.3);
+}
+
+.btn-delete:active,
+td button:active {
+    transform: scale(0.96);
+}
+
+/* ===== HISTORIAL ===== */
+.historial p,
+.history p {
+    color: rgba(255, 255, 255, 0.25);
+    font-style: italic;
+    text-align: center;
+    padding: 3rem 0;
+    font-size: 0.88rem;
+    position: relative;
+    z-index: 1;
+}
+
+.history-item {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.025);
+    border-left: 2px solid var(--cyan-dim);
+    padding: 0.65rem 1rem;
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 0.6rem;
+    font-size: 0.83rem;
+    color: var(--text-dim);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.history-item:hover {
+    background: rgba(0, 229, 255, 0.05);
+    border-color: var(--cyan);
+}
+
+/* ===== BADGE ===== */
+.badge {
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--cyan);
+    padding: 0.18rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    display: inline-block;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #060612;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--cyan-dim), var(--purple));
+    border-radius: 3px;
+}
+
+/* ===== ANIMACIÓN DE ENTRADA ===== */
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card,
+section {
+    animation: fadeSlideUp 0.5s ease both;
+}
+
+/* Escalonado de cards */
+section:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+section:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+section:nth-child(3) {
+    animation-delay: 0.25s;
+}
+
+section:nth-child(4) {
+    animation-delay: 0.35s;
+}
+
+/* ===== RESPONSIVE — TABLET ===== */
+@media (max-width: 900px) {
+
+    main,
+    .main-content,
+    .container {
+        grid-template-columns: 1fr;
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+        gap: 1.2rem;
+    }
+
+    header,
+    .header {
+        padding: 2rem 1.2rem 2.5rem;
+    }
+
+    header h1,
+    .header h1 {
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+
+    header p,
+    .header p {
+        font-size: 0.88rem;
+    }
+
+    .card,
+    section {
+        padding: 1.6rem 1.4rem;
+        border-radius: 18px;
+    }
+}
+
+/* ===== RESPONSIVE — MÓVIL ===== */
+@media (max-width: 600px) {
+
+    /* Header compacto */
+    header,
+    .header {
+        padding: 1.6rem 1rem 2rem;
+    }
+
+    header h1,
+    .header h1 {
+        font-size: 1.4rem;
+        letter-spacing: 0.5px;
+    }
+
+    header p,
+    .header p {
+        font-size: 0.8rem;
+        margin-top: 0.3rem;
+    }
+
+    /* Layout de una columna, sin margen excesivo */
+    main,
+    .main-content,
+    .container {
+        margin: 1rem auto;
+        padding: 0 0.75rem;
+        gap: 1rem;
+    }
+
+    /* Cards más compactas */
+    .card,
+    section {
+        padding: 1.2rem 1rem;
+        border-radius: 14px;
+        /* Desactivar hover de elevación en móvil */
+        transition: none;
+    }
+
+    .card:hover,
+    section:hover {
+        transform: none;
+    }
+
+    h2 {
+        font-size: 1.05rem;
+        margin-bottom: 1.1rem;
+        padding-bottom: 0.7rem;
+        letter-spacing: 0.8px;
+    }
+
+    /* Formulario: inputs más altos para toque fácil */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    textarea,
+    select {
+        padding: 0.75rem 0.9rem;
+        font-size: 0.95rem;
+        /* evita zoom automático en iOS */
+        border-radius: 10px;
+    }
+
+    label {
+        font-size: 0.7rem;
+    }
+
+    /* Botón Registrar: ancho completo en móvil */
+    button[type="submit"],
+    .btn-primary,
+    button.registrar,
+    input[type="submit"] {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.88rem;
+        border-radius: 10px;
+        margin-top: 0.6rem;
+    }
+
+    /* ===== TABLA RESPONSIVE: scroll horizontal ===== */
+    /* Envuelve la tabla para scroll en móvil */
+    .tabla-wrapper,
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 12px;
+        /* Indicador visual de que hay scroll */
+        background:
+            linear-gradient(to right, rgba(6, 6, 18, 0) 90%, rgba(0, 229, 255, 0.08) 100%);
+    }
+
+    table {
+        min-width: 540px;
+        /* fuerza scroll horizontal */
+        border-radius: 10px;
+    }
+
+    thead th {
+        padding: 0.7rem 0.75rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.8px;
+        white-space: nowrap;
+    }
+
+    tbody td {
+        padding: 0.75rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    /* Descripción: limitar longitud en móvil */
+    tbody td:nth-child(3) {
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Botón Eliminar: área de toque cómoda */
+    .btn-delete,
+    button.eliminar,
+    td button {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.7rem;
+        min-height: 36px;
+        min-width: 60px;
+        justify-content: center;
+    }
+
+    /* Historial */
+    .historial p,
+    .history p {
+        padding: 2rem 0;
+        font-size: 0.82rem;
+    }
+
+    .history-item {
+        padding: 0.55rem 0.85rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* ===== RESPONSIVE — MÓVIL PEQUEÑO (< 380px) ===== */
+@media (max-width: 380px) {
+
+    header h1,
+    .header h1 {
+        font-size: 1.15rem;
+    }
+
+    main,
+    .main-content,
+    .container {
+        padding: 0 0.5rem;
+    }
+
+    .card,
+    section {
+        padding: 1rem 0.85rem;
+    }
+
+    h2 {
+        font-size: 0.95rem;
+    }
+}
