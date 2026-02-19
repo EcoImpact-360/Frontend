@@ -1,13 +1,23 @@
 import React from "react";
 
 const BADGE_STYLES = {
+  // Mapeamos tanto en minúsculas como en mayúsculas para evitar errores de conexión
   low: { background: "#E8F5E9", color: "#1B5E20", label: "Baja", icon: "ℹ️" },
+  LOW: { background: "#E8F5E9", color: "#1B5E20", label: "Baja", icon: "ℹ️" },
+  
   medium: { background: "#FFF8E1", color: "#E65100", label: "Media", icon: "🔶" },
+  MEDIUM: { background: "#FFF8E1", color: "#E65100", label: "Media", icon: "🔶" },
+  
   high: { background: "#FFEBEE", color: "#B71C1C", label: "Alta", icon: "⚠️" },
+  HIGH: { background: "#FFEBEE", color: "#B71C1C", label: "Alta", icon: "⚠️" },
+  
+  // Caso por defecto para evitar que la app se rompa si llega un valor nulo
+  default: { background: "#F3F4F6", color: "#374151", label: "Normal", icon: "🔔" }
 };
 
 export default function AlertBadge({ severity }) {
-  const tone = BADGE_STYLES[severity] || BADGE_STYLES.medium;
+  // Buscamos el estilo. Si el backend manda algo raro, usamos el estilo por defecto.
+  const tone = BADGE_STYLES[severity] || BADGE_STYLES.default;
 
   return (
     <span
@@ -18,9 +28,13 @@ export default function AlertBadge({ severity }) {
         fontSize: "0.75rem",
         fontWeight: 600,
         padding: "0.25rem 0.625rem",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "0.25rem"
       }}
     >
-      {tone.icon} {tone.label}
+      <span>{tone.icon}</span>
+      <span>{tone.label}</span>
     </span>
   );
 }
