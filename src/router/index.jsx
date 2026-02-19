@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
+import Alerts from '../pages/Alerts';
 
 // Renders a fallback page for unknown routes.
 function NotFound() {
@@ -18,6 +19,7 @@ function Router() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/alerts" element={<Alerts />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

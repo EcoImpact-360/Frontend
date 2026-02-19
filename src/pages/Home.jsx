@@ -7,6 +7,7 @@ function Home() {
       <h1>Bienvenido a la Aplicación</h1>
       <p>Esta es la página de inicio.</p>
       <Link to="/dashboard">Ir al Dashboard</Link>
+      <Link to="/alerts">Ir a los Alertas</Link>
     </div>
   );
 }

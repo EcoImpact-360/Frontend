@@ -84,5 +84,31 @@
       "nivel_actual": 150,
       "ultima_vaciada": "2026-02-17"
     }
+  ],
+  "alerts": [
+    {
+      "id": "a1",
+      "title": "Consumo fuera de rango",
+      "message": "El consumo energetico supero el umbral esperado esta manana.",
+      "severity": "high",
+      "createdAt": "Hoy, 08:45",
+      "resolved": false
+    },
+    {
+      "id": "a2",
+      "title": "Recordatorio de mantenimiento",
+      "message": "Se acerca la fecha de revision preventiva del sistema HVAC.",
+      "severity": "medium",
+      "createdAt": "Ayer, 17:10",
+      "resolved": false
+    },
+    {
+      "id": "a3",
+      "title": "Meta semanal cumplida",
+      "message": "La sede Norte alcanzo su objetivo de reduccion de emisiones.",
+      "severity": "low",
+      "createdAt": "Ayer, 13:22",
+      "resolved": false
+    }
   ]
 }
