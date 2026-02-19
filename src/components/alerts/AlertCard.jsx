@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import AlertBadge from "./AlertBadge";
 
-export default function AlertCard({ alert, onResolve, disabled, resolved }) {
-  const isResolved = Boolean(resolved ?? alert.resolved);
+export default function AlertCard({ alert, onResolve, disabled }) {
+  // El backend usa el campo 'resolved' (boolean)
+  const isResolved = Boolean(alert.resolved);
   const statusLabel = isResolved ? "Resuelta" : "Pendiente";
+  
+  // Estado local para mostrar feedback mientras se llama a la API
+  const [isResolving, setIsResolving] = useState(false);
+
+  const handleResolveClick = async () => {
+    if (!onResolve) return;
+    
+    setIsResolving(true);
+    try {
+      // Pasamos el ID al padre para que ejecute alertsApi.resolveAlert(id)
+      await onResolve(alert.id);
+    } catch (error) {
+      console.error("Error en la interfaz al resolver:", error);
+    } finally {
+      setIsResolving(false);
+    }
+  };
 
   return (
     <article
@@ -13,6 +31,7 @@ export default function AlertCard({ alert, onResolve, disabled, resolved }) {
         borderRadius: "12px",
         marginBottom: "1rem",
         padding: "1rem",
+        opacity: isResolved ? 0.7 : 1, // Visualmente más claro si está resuelta
       }}
     >
       <header
@@ -34,17 +53,21 @@ export default function AlertCard({ alert, onResolve, disabled, resolved }) {
 
       <p style={{ color: "#374151", margin: "0 0 0.5rem 0" }}>{alert.message}</p>
 
-      <small style={{ color: "#6B7280" }}>{alert.createdAt}</small>
+      {/* El backend suele enviar 'createdAt' en formato ISO o string */}
+      <small style={{ color: "#6B7280" }}>
+        {alert.createdAt ? new Date(alert.createdAt).toLocaleString() : "Fecha no disponible"}
+      </small>
 
       {!isResolved && (
         <div style={{ marginTop: "0.75rem" }}>
           <button
             type="button"
             className="alerts-btn"
-            onClick={() => onResolve && onResolve(alert)}
-            disabled={disabled}
+            onClick={handleResolveClick}
+            // Se deshabilita si ya se está resolviendo, si viene deshabilitado por prop, o si no hay ID
+            disabled={disabled || isResolving || !alert.id}
           >
-            Resolver
+            {isResolving ? "Procesando..." : "Resolver"}
           </button>
         </div>
       )}

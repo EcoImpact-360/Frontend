@@ -1,26 +1,15 @@
 import { request } from "./apiClient";
 
-function buildQuery(params) {
-  if (!params || typeof params !== "object") {
-    return "";
-  }
-
-  const searchParams = new URLSearchParams();
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      searchParams.append(key, String(value));
-    }
+export function getAlerts() {
+  // Ahora llamamos a /pending para que coincida con tu @GetMapping("/pending")
+  return request("/api/v1/alerts/pending", { 
+    method: "GET" 
   });
-
-  const query = searchParams.toString();
-  return query ? `?${query}` : "";
-}
-
-export function getAlerts(params) {
-  const qs = buildQuery(params);
-  return request(`/api/alerts${qs}`, { method: "GET" });
 }
 
 export function resolveAlert(id) {
-  return request(`/api/alerts/${id}/resolve`, { method: "PATCH" });
+  // Ahora usamos la ruta /{id}/resolve de tu @PatchMapping
+  return request(`/api/v1/alerts/${id}/resolve`, { 
+    method: "PATCH" 
+  });
 }
