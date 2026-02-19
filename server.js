@@ -1,5 +1,8 @@
-const jsonServer = require("json-server");
-const path = require("path");
+import jsonServer from "json-server";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const server = jsonServer.create();
 const router = jsonServer.router(path.join(__dirname, "db.json"));
@@ -30,7 +33,7 @@ server.patch("/api/alerts/:id/resolve", (req, res) => {
 
 server.use("/api", router);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Fake API running on http://127.0.0.1:${PORT}`);
 });
