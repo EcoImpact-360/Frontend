@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AlertCard from "../components/alerts/AlertCard";
+import { getAlerts } from "../services/alertsApi";
+
+const USE_MOCK = true;
 
 const MOCK_ALERTS = [
   {
@@ -33,28 +36,67 @@ export default function Alerts() {
   const [reloadToken, setReloadToken] = useState(0);
 
   useEffect(() => {
+    let isActive = true;
     setStatus("loading");
     setErrorMessage("");
 
-    const timerId = window.setTimeout(() => {
-      if (scenario === "error") {
+    if (USE_MOCK) {
+      const timerId = window.setTimeout(() => {
+        if (!isActive) {
+          return;
+        }
+
+        if (scenario === "error") {
+          setAlerts([]);
+          setStatus("error");
+          setErrorMessage("No fue posible cargar las alertas. Intenta nuevamente.");
+          return;
+        }
+
+        if (scenario === "empty") {
+          setAlerts([]);
+          setStatus("empty");
+          return;
+        }
+
+        setAlerts(MOCK_ALERTS);
+        setStatus("success");
+      }, 600);
+
+      return () => {
+        isActive = false;
+        window.clearTimeout(timerId);
+      };
+    }
+
+    getAlerts()
+      .then((data) => {
+        if (!isActive) {
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          setAlerts([]);
+          setStatus("empty");
+          return;
+        }
+
+        setAlerts(data);
+        setStatus("success");
+      })
+      .catch((err) => {
+        if (!isActive) {
+          return;
+        }
+
         setAlerts([]);
         setStatus("error");
-        setErrorMessage("No fue posible cargar las alertas. Intenta nuevamente.");
-        return;
-      }
+        setErrorMessage(err?.message || "No fue posible cargar las alertas.");
+      });
 
-      if (scenario === "empty") {
-        setAlerts([]);
-        setStatus("empty");
-        return;
-      }
-
-      setAlerts(MOCK_ALERTS);
-      setStatus("success");
-    }, 600);
-
-    return () => window.clearTimeout(timerId);
+    return () => {
+      isActive = false;
+    };
   }, [scenario, reloadToken]);
 
   return (
@@ -83,24 +125,26 @@ export default function Alerts() {
       `}</style>
       <h1 style={{ marginTop: 0 }}>Alerts</h1>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          justifyContent: "center",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <button type="button" className="alerts-btn" onClick={() => setScenario("success")}>
-          Simular exito
-        </button>
-        <button type="button" className="alerts-btn" onClick={() => setScenario("empty")}>
-          Simular vacio
-        </button>
-        <button type="button" className="alerts-btn" onClick={() => setScenario("error")}>
-          Simular error
-        </button>
-      </div>
+      {USE_MOCK && (
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5rem",
+            justifyContent: "center",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <button type="button" className="alerts-btn" onClick={() => setScenario("success")}>
+            Simular exito
+          </button>
+          <button type="button" className="alerts-btn" onClick={() => setScenario("empty")}>
+            Simular vacio
+          </button>
+          <button type="button" className="alerts-btn" onClick={() => setScenario("error")}>
+            Simular error
+          </button>
+        </div>
+      )}
 
       {status === "loading" && <p>Cargando alertas...</p>}
 
