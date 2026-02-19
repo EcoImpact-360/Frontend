@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AlertCard from "../components/alerts/AlertCard";
-import { getAlerts } from "../services/alertsApi";
+import ResolveAlertModal from "../components/alerts/ResolveAlertModal";
+import Toast from "../components/alerts/Toast";
+import { getAlerts, resolveAlert } from "../services/alertsApi";
 
 const USE_MOCK = true;
 
@@ -34,6 +36,29 @@ export default function Alerts() {
   const [errorMessage, setErrorMessage] = useState("");
   const [scenario, setScenario] = useState("success");
   const [reloadToken, setReloadToken] = useState(0);
+  const [selectedAlert, setSelectedAlert] = useState(null);
+  const [isResolving, setIsResolving] = useState(false);
+  const [toast, setToast] = useState(null);
+  const toastTimeoutRef = useRef(null);
+
+  const showToast = (type, message) => {
+    setToast({ type, message });
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
+    }
+    toastTimeoutRef.current = window.setTimeout(() => {
+      setToast(null);
+      toastTimeoutRef.current = null;
+    }, 3500);
+  };
+
+  const handleCloseToast = () => {
+    if (toastTimeoutRef.current) {
+      window.clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = null;
+    }
+    setToast(null);
+  };
 
   useEffect(() => {
     let isActive = true;
@@ -99,6 +124,55 @@ export default function Alerts() {
     };
   }, [scenario, reloadToken]);
 
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) {
+        window.clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleOpenResolve = (alert) => {
+    setSelectedAlert(alert);
+  };
+
+  const handleConfirmResolve = async () => {
+    if (!selectedAlert) {
+      return;
+    }
+
+    setIsResolving(true);
+
+    try {
+      if (USE_MOCK) {
+        setAlerts((prev) =>
+          prev.map((item) =>
+            item.id === selectedAlert.id ? { ...item, resolved: true } : item
+          )
+        );
+        showToast("success", "Alerta resuelta correctamente.");
+      } else {
+        await resolveAlert(selectedAlert.id);
+        const data = await getAlerts();
+
+        if (!data || data.length === 0) {
+          setAlerts([]);
+          setStatus("empty");
+        } else {
+          setAlerts(data);
+          setStatus("success");
+        }
+
+        showToast("success", "Alerta resuelta correctamente.");
+      }
+    } catch (err) {
+      showToast("error", err?.message || "No se pudo resolver la alerta.");
+    } finally {
+      setIsResolving(false);
+      setSelectedAlert(null);
+    }
+  };
+
   return (
     <div style={{ padding: "2rem", maxWidth: "840px", margin: "0 auto" }}>
       <style>{`
@@ -123,6 +197,7 @@ export default function Alerts() {
           cursor: not-allowed;
         }
       `}</style>
+      <Toast type={toast?.type} message={toast?.message} onClose={handleCloseToast} />
       <h1 style={{ marginTop: 0 }}>Alerts</h1>
 
       {USE_MOCK && (
@@ -166,10 +241,28 @@ export default function Alerts() {
       {status === "success" && (
         <div>
           {alerts.map((alert) => (
-            <AlertCard key={alert.id} alert={alert} />
+            <AlertCard
+              key={alert.id}
+              alert={alert}
+              resolved={alert.resolved}
+              disabled={isResolving}
+              onResolve={handleOpenResolve}
+            />
           ))}
         </div>
       )}
+
+      <ResolveAlertModal
+        open={Boolean(selectedAlert)}
+        alertTitle={selectedAlert?.title || "esta alerta"}
+        loading={isResolving}
+        onClose={() => {
+          if (!isResolving) {
+            setSelectedAlert(null);
+          }
+        }}
+        onConfirm={handleConfirmResolve}
+      />
     </div>
   );
 }
