@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import AppLayout from '../components/layout/AppLayout';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 import Alerts from '../pages/Alerts';
@@ -17,10 +18,12 @@ function NotFound() {
 function Router() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/alerts" element={<Alerts />} />
-      <Route path="*" element={<NotFound />} />
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/alerts" element={<Alerts />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
     </Routes>
   );
 }
