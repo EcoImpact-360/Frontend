@@ -4,7 +4,7 @@ import ResolveAlertModal from "../components/alerts/ResolveAlertModal";
 import Toast from "../components/alerts/Toast";
 import { getAlerts, resolveAlert } from "../services/alertsApi";
 
-const USE_MOCK = true;
+const USE_MOCK = import.meta.env?.VITE_USE_MOCK !== "false";
 
 const MOCK_ALERTS = [
   {
