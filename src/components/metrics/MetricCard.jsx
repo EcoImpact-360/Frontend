@@ -1,8 +1,7 @@
 import { formatCurrency, formatNumber, formatPercentage } from '../../utils/formatters';
 
 // Shows a single metric value with optional icon and trend indicator.
-function MetricCard({ title, value, type = 'number', icon, trend }) {
-  // Formats the metric value based on the requested display type.
+function MetricCard({ title, value, type = 'number', unit, icon, trend }) {
   const formatValue = () => {
     switch (type) {
       case 'currency':
@@ -14,32 +13,20 @@ function MetricCard({ title, value, type = 'number', icon, trend }) {
     }
   };
 
+  const trendClass = trend >= 0 ? 'metric-card__trend metric-card__trend--up' : 'metric-card__trend metric-card__trend--down';
+  const displayValue = unit ? `${formatValue()} ${unit}` : formatValue();
+
   return (
-    <div style={{
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      padding: '1.5rem',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '0.5rem'
-    }}>
-      <span style={{ color: '#666', fontSize: '0.875rem' }}>{title}</span>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
-          {formatValue()}
-        </span>
-        {icon && <span style={{ fontSize: '1.5rem' }}>{icon}</span>}
+    <article className="surface-card metric-card">
+      <p className="metric-card__label">{title}</p>
+      <div className="metric-card__row">
+        <h3 className="metric-card__value">
+          {displayValue}
+        </h3>
+        {icon && <span className="metric-card__icon">{icon}</span>}
       </div>
-      {trend !== undefined && (
-        <span style={{
-          color: trend >= 0 ? '#22c55e' : '#ef4444',
-          fontSize: '0.875rem'
-        }}>
-          {trend >= 0 ? '↑' : '↓'} {Math.abs(trend)}%
-        </span>
-      )}
-    </div>
+      {trend !== undefined && <p className={trendClass}>{trend >= 0 ? 'UP' : 'DOWN'} {Math.abs(trend)}%</p>}
+    </article>
   );
 }
 

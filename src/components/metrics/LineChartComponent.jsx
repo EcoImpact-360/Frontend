@@ -2,45 +2,35 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 function LineChartComponent({ data, dataKey, xAxisKey = 'name', title }) {
   if (!data || data.length === 0) {
-    return <div style={{ padding: '1.5rem', textAlign: 'center' }}>No hay datos históricos disponibles</div>;
+    return <div className="alerts-state">No hay datos historicos disponibles</div>;
   }
 
   return (
-    <div style={{
-      backgroundColor: '#fff',
-      borderRadius: '8px',
-      padding: '1.5rem',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-    }}>
-      {title && <h3 style={{ margin: '0 0 1rem 0', color: '#374151' }}>{title}</h3>}
+    <section className="surface-card chart-card">
+      {title && <h3 className="chart-card__title">{title}</h3>}
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-          <XAxis 
-            dataKey={xAxisKey} 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fill: '#6B7280', fontSize: 12 }}
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#d9e2ee" />
+          <XAxis dataKey={xAxisKey} axisLine={false} tickLine={false} tick={{ fill: '#4e616f', fontSize: 12 }} />
+          <YAxis axisLine={false} tickLine={false} tick={{ fill: '#4e616f', fontSize: 12 }} />
+          <Tooltip
+            contentStyle={{
+              borderRadius: '10px',
+              border: '1px solid #c9d6e6',
+              boxShadow: '0 10px 24px rgba(38,50,56,0.12)',
+            }}
           />
-          <YAxis 
-            axisLine={false} 
-            tickLine={false} 
-            tick={{ fill: '#6B7280', fontSize: 12 }}
-          />
-          <Tooltip 
-            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
-          />
-          <Line 
-            type="monotone" 
-            dataKey={dataKey} 
-            stroke="#3b82f6" 
-            strokeWidth={3} 
-            dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }}
+          <Line
+            type="monotone"
+            dataKey={dataKey}
+            stroke="#2E7D32"
+            strokeWidth={3}
+            dot={{ r: 4, fill: '#2E7D32', strokeWidth: 2, stroke: '#fff' }}
             activeDot={{ r: 6 }}
           />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </section>
   );
 }
 
