@@ -7,6 +7,7 @@ export default function ResolveAlertModal({
   onClose,
   loading,
 }) {
+  const cancelRef = useRef(null);
   const confirmRef = useRef(null);
 
   useEffect(() => {
@@ -22,13 +23,43 @@ export default function ResolveAlertModal({
   const handleKeyDown = (event) => {
     if (event.key === "Escape") {
       onClose();
+      return;
+    }
+
+    if (event.key !== "Tab") {
+      return;
+    }
+
+    const cancelEl = cancelRef.current;
+    const confirmEl = confirmRef.current;
+
+    if (!cancelEl || !confirmEl) {
+      return;
+    }
+
+    if (event.shiftKey) {
+      if (document.activeElement === confirmEl) {
+        event.preventDefault();
+        cancelEl.focus();
+      } else if (document.activeElement === cancelEl) {
+        event.preventDefault();
+        confirmEl.focus();
+      }
+      return;
+    }
+
+    if (document.activeElement === cancelEl) {
+      event.preventDefault();
+      confirmEl.focus();
+    } else if (document.activeElement === confirmEl) {
+      event.preventDefault();
+      cancelEl.focus();
     }
   };
 
   return (
     <div
       onClick={onClose}
-      onKeyDown={handleKeyDown}
       role="presentation"
       style={{
         position: "fixed",
@@ -45,6 +76,8 @@ export default function ResolveAlertModal({
         role="dialog"
         aria-modal="true"
         aria-label="Resolver alerta"
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
         onClick={(event) => event.stopPropagation()}
         style={{
           background: "#FFFFFF",
@@ -65,6 +98,7 @@ export default function ResolveAlertModal({
             className="alerts-btn"
             onClick={onClose}
             disabled={loading}
+            ref={cancelRef}
           >
             Cancelar
           </button>

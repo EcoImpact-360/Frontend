@@ -83,4 +83,27 @@ describe("Alerts UI (mock mode)", () => {
     const after = screen.getAllByRole("button", { name: /Resolver/i }).length;
     expect(after).toBe(before - 1);
   });
+
+  test("traps focus between cancel and confirm buttons in modal", async () => {
+    render(<Alerts />);
+    await advanceMockFetch();
+
+    fireEvent.click(screen.getAllByRole("button", { name: /Resolver/i })[0]);
+
+    const dialog = screen.getByRole("dialog");
+    const cancelBtn = screen.getByRole("button", { name: /Cancelar/i });
+    const confirmBtn = screen.getByRole("button", { name: /Confirmar/i });
+
+    confirmBtn.focus();
+    expect(confirmBtn).toHaveFocus();
+
+    fireEvent.keyDown(dialog, { key: "Tab" });
+    expect(cancelBtn).toHaveFocus();
+
+    fireEvent.keyDown(dialog, { key: "Tab" });
+    expect(confirmBtn).toHaveFocus();
+
+    fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true });
+    expect(cancelBtn).toHaveFocus();
+  });
 });
