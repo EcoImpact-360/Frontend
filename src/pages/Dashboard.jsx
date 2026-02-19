@@ -1,132 +1,103 @@
 import { Link } from 'react-router-dom';
-import useFetch from '../hooks/useFetch';
+import { useEffect, useState } from 'react';
+import { dashboardApi } from '../api/dashboardApi';
 import MetricCard from '../components/metrics/MetricCard';
 import BarChartComponent from '../components/metrics/BarChartComponent';
+import Toast from '../components/alerts/Toast';
 
-// Renders dashboard metrics and charts using live data from the fake API.
 function Dashboard() {
-  const { data: metrics, loading: loadingMetrics, error: errorMetrics } = useFetch('/aulas', {
-    dependencies: []
-  });
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { data: contenedores, loading: loadingContenedores } = useFetch('/contenedores');
-
-  // Aggregates aulas and contenedores into top-level KPI values for cards.
-  const calculateMetrics = () => {
-    if (!metrics) return null;
-    
-    const totalCubos = metrics.reduce((sum, aula) => sum + (aula.total_cubos_semana || 0), 0);
-    const totalReciclables = metrics.reduce((sum, aula) => {
-      return sum + aula.cubos_por_dia.reduce((s, d) => s + (d.cubos_reciclables || 0), 0);
-    }, 0);
-    const totalBasura = metrics.reduce((sum, aula) => {
-      return sum + aula.cubos_por_dia.reduce((s, d) => s + (d.cubos_basura || 0), 0);
-    }, 0);
-    
-    let capacidadTotal = 0;
-    let nivelActual = 0;
-    if (contenedores) {
-      capacidadTotal = contenedores.reduce((sum, c) => sum + (c.capacidad_max || 0), 0);
-      nivelActual = contenedores.reduce((sum, c) => sum + (c.nivel_actual || 0), 0);
-    }
-    
-    return {
-      totalCubos,
-      totalReciclables,
-      totalBasura,
-      totalAulas: metrics.length,
-      nivelPromedio: capacidadTotal > 0 ? Math.round((nivelActual / capacidadTotal) * 100) : 0,
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        // Llamada a tu endpoint /api/v1/dashboard/global
+        const result = await dashboardApi.getMetrics();
+        setData(result);
+      } catch (err) {
+        setError(err.message || "Error al cargar datos del servidor");
+      } finally {
+        setLoading(false);
+      }
     };
-  };
 
-  const displayMetrics = calculateMetrics() || {
-    totalCubos: 0,
-    totalReciclables: 0,
-    totalBasura: 0,
-    totalAulas: 0,
-    nivelPromedio: 0,
-  };
+    fetchDashboardData();
+  }, []);
 
-  // Converts aulas data into chart series for basura vs reciclables.
-  const chartData = metrics ? metrics.map(aula => ({
-    name: aula.name,
-    basura: aula.cubos_por_dia.reduce((s, d) => s + (d.cubos_basura || 0), 0),
-    reciclables: aula.cubos_por_dia.reduce((s, d) => s + (d.cubos_reciclables || 0), 0),
-  })) : [];
+  // Si no hay datos todavía, mostramos un estado de carga
+  if (loading) return <div style={{ padding: '2rem' }}>Cargando métricas reales...</div>;
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <Toast type="error" message={error} onClose={() => setError(null)} />
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1>Dashboard - Gestión de Residuos</h1>
-        <Link to="/">Volver al Inicio</Link>
+        <div>
+          <h1 style={{ margin: 0 }}>EcoImpact 360 - Dashboard</h1>
+          <p style={{ color: '#6b7280' }}>Datos en tiempo real</p>
+        </div>
+        <Link to="/" className="alerts-btn">Volver al Inicio</Link>
       </div>
 
-      {errorMetrics && (
-        <div style={{ 
-          padding: '1rem', 
-          backgroundColor: '#fee2e2', 
-          color: '#dc2626', 
-          borderRadius: '8px',
-          marginBottom: '1rem'
-        }}>
-          Error: {errorMetrics}
-        </div>
-      )}
-
+      {/* Grid de KPIs - Usando los campos exactos del JSON de tu curl */}
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-        gap: '1rem',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+        gap: '1.5rem',
         marginBottom: '2rem'
       }}>
         <MetricCard 
-          title="Total Cubos Semana" 
-          value={displayMetrics.totalCubos} 
-          type="number" 
-          icon="🗑️"
+          title="Peso Recolectado" 
+          value={data?.totalKgRecolectados || 0} 
+          unit="kg"
+          icon="⚖️"
         />
         <MetricCard 
-          title="Total Reciclables" 
-          value={displayMetrics.totalReciclables} 
-          type="number" 
-          icon="♻️"
+          title="Ahorro CO2" 
+          value={data?.totalCo2Equivalente?.toFixed(2) || 0} 
+          unit="kg" 
+          icon="🍃"
         />
         <MetricCard 
-          title="Total Basura" 
-          value={displayMetrics.totalBasura} 
-          type="number" 
-          icon="🗑️"
+          title="Agua Ahorrada" 
+          value={data?.totalAguaAhorrada || 0} 
+          unit="L" 
+          icon="💧"
         />
         <MetricCard 
-          title="Nivel Promedio Contenedores" 
-          value={displayMetrics.nivelPromedio} 
-          type="percentage" 
-          icon="📊"
+          title="Árboles Salvados." 
+          value={data?.arbolesEquivalentes?.toFixed(2) || 0} 
+          icon="🌳"
         />
       </div>
-
-      {loadingMetrics && <p>Cargando métricas...</p>}
 
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
-        gap: '1rem' 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', 
+        gap: '1.5rem' 
       }}>
+        {/* Ranking de Aulas - El backend devuelve 'rankingAulas' con [{name, score}] */}
         <BarChartComponent 
-          data={chartData} 
-          dataKey="basura" 
-          title="Basura por Aula" 
+          data={data?.rankingAulas || []} 
+          dataKey="score" 
+          xAxisKey="name"
+          title="Puntuación por Aula" 
         />
+
+        {/* Distribución por Categoría - El backend devuelve 'residuosPorCategoria' */}
         <BarChartComponent 
-          data={chartData} 
-          dataKey="reciclables" 
-          title="Reciclables por Aula" 
+          data={Object.entries(data?.residuosPorCategoria || {}).map(([key, val]) => ({ name: key, cantidad: val }))} 
+          dataKey="cantidad" 
+          title="Residuos por Categoría (kg)" 
         />
       </div>
-
-      {(loadingMetrics || loadingContenedores) && (
-        <p style={{ marginTop: '1rem' }}>Cargando gráficos...</p>
-      )}
+      
+      <div style={{ marginTop: '2rem', textAlign: 'center', color: '#9ca3af', fontSize: '0.875rem' }}>
+        Equivalente a {data?.kmCarroEquivalente?.toFixed(1)} km recorridos en coche 🚗
+      </div>
     </div>
   );
 }
