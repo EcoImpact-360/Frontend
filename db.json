@@ -1,88 +1,271 @@
 {
-  "users": [
-    {
-      "id": 1,
-      "name": "Juan Pérez",
-      "role": "gestor_limpieza",
-      "email": "juan@colegio.com",
-      "password": "hashed_password_example",
-      "assigned_sections": ["aula1", "aula2"]
-    },
-    {
-      "id": 2,
-      "name": "María López",
-      "role": "gestor_limpieza",
-      "email": "maria@colegio.com",
-      "password": "hashed_password_example",
-      "assigned_sections": ["aula3"]
-    }
-  ],
-  "aulas": [
-    {
-      "id": 1,
-      "name": "Aula 1",
-      "cubos_por_dia": [
-        { "dia": "lunes", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "martes", "cubos_basura": 4, "cubos_reciclables": 2 },
-        { "dia": "miércoles", "cubos_basura": 6, "cubos_reciclables": 4 },
-        { "dia": "jueves", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "viernes", "cubos_basura": 7, "cubos_reciclables": 5 }
-      ],
-      "total_cubos_semana": 39,
-      "gestor_id": 1
-    },
-    {
-      "id": 2,
-      "name": "Aula 2",
-      "cubos_por_dia": [
-        { "dia": "lunes", "cubos_basura": 3, "cubos_reciclables": 2 },
-        { "dia": "martes", "cubos_basura": 4, "cubos_reciclables": 1 },
-        { "dia": "miércoles", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "jueves", "cubos_basura": 2, "cubos_reciclables": 2 },
-        { "dia": "viernes", "cubos_basura": 4, "cubos_reciclables": 2 }
-      ],
-      "total_cubos_semana": 28,
-      "gestor_id": 1
-    },
-    {
-      "id": 3,
-      "name": "Aula 3",
-      "cubos_por_dia": [
-        { "dia": "lunes", "cubos_basura": 6, "cubos_reciclables": 4 },
-        { "dia": "martes", "cubos_basura": 5, "cubos_reciclables": 3 },
-        { "dia": "miércoles", "cubos_basura": 7, "cubos_reciclables": 5 },
-        { "dia": "jueves", "cubos_basura": 4, "cubos_reciclables": 2 },
-        { "dia": "viernes", "cubos_basura": 8, "cubos_reciclables": 6 }
-      ],
-      "total_cubos_semana": 50,
-      "gestor_id": 2
-    }
-  ],
-  "contenedores": [
-    {
-      "id": 1,
-      "name": "Contenedor Reciclable Principal",
-      "ubicacion": "Patio Central",
-      "capacidad_max": 500,
-      "depositos_por_aula": [
-        { "aula_id": 1, "dia": "lunes", "cubos_depositados": 3 },
-        { "aula_id": 1, "dia": "martes", "cubos_depositados": 2 },
-        { "aula_id": 2, "dia": "lunes", "cubos_depositados": 2 }
-      ],
-      "nivel_actual": 250,
-      "ultima_vaciada": "2026-02-18"
-    },
-    {
-      "id": 2,
-      "name": "Contenedor Orgánico Norte",
-      "ubicacion": "Zona Norte",
-      "capacidad_max": 300,
-      "depositos_por_aula": [
-        { "aula_id": 3, "dia": "lunes", "cubos_depositados": 4 },
-        { "aula_id": 3, "dia": "martes", "cubos_depositados": 3 }
-      ],
-      "nivel_actual": 150,
-      "ultima_vaciada": "2026-02-17"
-    }
-  ]
+    "users":  [
+                  {
+                      "id":  1,
+                      "name":  "Juan PÃ©rez",
+                      "role":  "gestor_limpieza",
+                      "email":  "juan@colegio.com",
+                      "password":  "hashed_password_example",
+                      "assigned_sections":  [
+                                                "aula1",
+                                                "aula2"
+                                            ]
+                  },
+                  {
+                      "id":  2,
+                      "name":  "MarÃ­a LÃ³pez",
+                      "role":  "gestor_limpieza",
+                      "email":  "maria@colegio.com",
+                      "password":  "hashed_password_example",
+                      "assigned_sections":  [
+                                                "aula3"
+                                            ]
+                  }
+              ],
+    "aulas":  [
+                  {
+                      "id":  1,
+                      "name":  "Aula 1",
+                      "cubos_por_dia":  [
+                                            {
+                                                "dia":  "lunes",
+                                                "cubos_basura":  5,
+                                                "cubos_reciclables":  3
+                                            },
+                                            {
+                                                "dia":  "martes",
+                                                "cubos_basura":  4,
+                                                "cubos_reciclables":  2
+                                            },
+                                            {
+                                                "dia":  "miÃ©rcoles",
+                                                "cubos_basura":  6,
+                                                "cubos_reciclables":  4
+                                            },
+                                            {
+                                                "dia":  "jueves",
+                                                "cubos_basura":  5,
+                                                "cubos_reciclables":  3
+                                            },
+                                            {
+                                                "dia":  "viernes",
+                                                "cubos_basura":  7,
+                                                "cubos_reciclables":  5
+                                            }
+                                        ],
+                      "total_cubos_semana":  39,
+                      "gestor_id":  1
+                  },
+                  {
+                      "id":  2,
+                      "name":  "Aula 2",
+                      "cubos_por_dia":  [
+                                            {
+                                                "dia":  "lunes",
+                                                "cubos_basura":  3,
+                                                "cubos_reciclables":  2
+                                            },
+                                            {
+                                                "dia":  "martes",
+                                                "cubos_basura":  4,
+                                                "cubos_reciclables":  1
+                                            },
+                                            {
+                                                "dia":  "miÃ©rcoles",
+                                                "cubos_basura":  5,
+                                                "cubos_reciclables":  3
+                                            },
+                                            {
+                                                "dia":  "jueves",
+                                                "cubos_basura":  2,
+                                                "cubos_reciclables":  2
+                                            },
+                                            {
+                                                "dia":  "viernes",
+                                                "cubos_basura":  4,
+                                                "cubos_reciclables":  2
+                                            }
+                                        ],
+                      "total_cubos_semana":  28,
+                      "gestor_id":  1
+                  },
+                  {
+                      "id":  3,
+                      "name":  "Aula 3",
+                      "cubos_por_dia":  [
+                                            {
+                                                "dia":  "lunes",
+                                                "cubos_basura":  6,
+                                                "cubos_reciclables":  4
+                                            },
+                                            {
+                                                "dia":  "martes",
+                                                "cubos_basura":  5,
+                                                "cubos_reciclables":  3
+                                            },
+                                            {
+                                                "dia":  "miÃ©rcoles",
+                                                "cubos_basura":  7,
+                                                "cubos_reciclables":  5
+                                            },
+                                            {
+                                                "dia":  "jueves",
+                                                "cubos_basura":  4,
+                                                "cubos_reciclables":  2
+                                            },
+                                            {
+                                                "dia":  "viernes",
+                                                "cubos_basura":  8,
+                                                "cubos_reciclables":  6
+                                            }
+                                        ],
+                      "total_cubos_semana":  50,
+                      "gestor_id":  2
+                  }
+              ],
+    "contenedores":  [
+                         {
+                             "id":  1,
+                             "name":  "Contenedor Reciclable Principal",
+                             "ubicacion":  "Patio Central",
+                             "capacidad_max":  500,
+                             "depositos_por_aula":  [
+                                                        {
+                                                            "aula_id":  1,
+                                                            "dia":  "lunes",
+                                                            "cubos_depositados":  3
+                                                        },
+                                                        {
+                                                            "aula_id":  1,
+                                                            "dia":  "martes",
+                                                            "cubos_depositados":  2
+                                                        },
+                                                        {
+                                                            "aula_id":  2,
+                                                            "dia":  "lunes",
+                                                            "cubos_depositados":  2
+                                                        }
+                                                    ],
+                             "nivel_actual":  250,
+                             "ultima_vaciada":  "2026-02-18"
+                         },
+                         {
+                             "id":  2,
+                             "name":  "Contenedor OrgÃ¡nico Norte",
+                             "ubicacion":  "Zona Norte",
+                             "capacidad_max":  300,
+                             "depositos_por_aula":  [
+                                                        {
+                                                            "aula_id":  3,
+                                                            "dia":  "lunes",
+                                                            "cubos_depositados":  4
+                                                        },
+                                                        {
+                                                            "aula_id":  3,
+                                                            "dia":  "martes",
+                                                            "cubos_depositados":  3
+                                                        }
+                                                    ],
+                             "nivel_actual":  150,
+                             "ultima_vaciada":  "2026-02-17"
+                         }
+                     ],
+    "alerts":  [
+                   {
+                       "id":  "al-101",
+                       "title":  "Contenedor Norte al 92%",
+                       "message":  "El contenedor organico de Zona Norte esta cerca de su capacidad maxima.",
+                       "severity":  "high",
+                       "category":  "Capacidad",
+                       "location":  "Zona Norte",
+                       "assignedTo":  "Maria Lopez",
+                       "createdAt":  "2026-02-19T08:45:00.000Z",
+                       "resolved":  false,
+                       "resolvedAt":  null
+                   },
+                   {
+                       "id":  "al-102",
+                       "title":  "Pico de consumo en Aula 1",
+                       "message":  "Se detecto un incremento de consumo electrico por encima del umbral esperado.",
+                       "severity":  "high",
+                       "category":  "Energia",
+                       "location":  "Aula 1",
+                       "assignedTo":  "Juan Perez",
+                       "createdAt":  "2026-02-19T07:20:00.000Z",
+                       "resolved":  false,
+                       "resolvedAt":  null
+                   },
+                   {
+                       "id":  "al-103",
+                       "title":  "Ruta de recoleccion incompleta",
+                       "message":  "No se completo la recoleccion en el bloque B durante el turno de manana.",
+                       "severity":  "medium",
+                       "category":  "Operacion",
+                       "location":  "Bloque B",
+                       "assignedTo":  "Equipo Limpieza",
+                       "createdAt":  "2026-02-18T15:10:00.000Z",
+                       "resolved":  false,
+                       "resolvedAt":  null
+                   },
+                   {
+                       "id":  "al-104",
+                       "title":  "Mantenimiento preventivo programado",
+                       "message":  "El equipo de compactacion requiere revision preventiva esta semana.",
+                       "severity":  "low",
+                       "category":  "Mantenimiento",
+                       "location":  "Patio Central",
+                       "assignedTo":  "Soporte Tecnico",
+                       "createdAt":  "2026-02-18T12:30:00.000Z",
+                       "resolved":  false,
+                       "resolvedAt":  null
+                   },
+                   {
+                       "id":  "al-105",
+                       "title":  "Separacion incorrecta en Aula 3",
+                       "message":  "Se detectaron residuos organicos en contenedor de reciclaje.",
+                       "severity":  "medium",
+                       "category":  "Reciclaje",
+                       "location":  "Aula 3",
+                       "assignedTo":  "Maria Lopez",
+                       "createdAt":  "2026-02-17T10:05:00.000Z",
+                       "resolved":  false,
+                       "resolvedAt":  null
+                   },
+                   {
+                       "id":  "al-106",
+                       "title":  "Meta diaria superada",
+                       "message":  "La sede Sur supero el objetivo de reciclaje del dia.",
+                       "severity":  "low",
+                       "category":  "KPI",
+                       "location":  "Sede Sur",
+                       "assignedTo":  "Analitica",
+                       "createdAt":  "2026-02-17T09:00:00.000Z",
+                       "resolved":  true,
+                       "resolvedAt":  "2026-02-17T11:45:00.000Z"
+                   },
+                   {
+                       "id":  "al-107",
+                       "title":  "Sensor de peso intermitente",
+                       "message":  "El sensor del contenedor principal reporta datos intermitentes.",
+                       "severity":  "medium",
+                       "category":  "Hardware",
+                       "location":  "Patio Central",
+                       "assignedTo":  "Soporte Tecnico",
+                       "createdAt":  "2026-02-16T16:40:00.000Z",
+                       "resolved":  true,
+                       "resolvedAt":  "2026-02-16T18:20:00.000Z"
+                   },
+                   {
+                       "id":  "al-108",
+                       "title":  "Demora en vaciado externo",
+                       "message":  "El proveedor externo no realizo el vaciado en el horario pactado.",
+                       "severity":  "high",
+                       "category":  "Proveedor",
+                       "location":  "Muelle de carga",
+                       "assignedTo":  "Coordinacion",
+                       "createdAt":  "2026-02-15T14:00:00.000Z",
+                       "resolved":  false,
+                       "resolvedAt":  null
+                   }
+               ]
 }

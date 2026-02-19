@@ -241,6 +241,86 @@ a {
   background: #ffffff;
 }
 
+.alerts-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.alerts-toolbar {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.alerts-toolbar__controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.alerts-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.alerts-field span {
+  font-size: 0.8rem;
+  color: var(--color-text-soft);
+  font-weight: 600;
+}
+
+.alerts-input,
+.alerts-select {
+  border: 1px solid #c8d6e7;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--color-text);
+  min-height: 2.2rem;
+  padding: 0.45rem 0.65rem;
+  font-family: inherit;
+  font-size: 0.88rem;
+}
+
+.alerts-input:focus,
+.alerts-select:focus {
+  outline: 2px solid rgba(25, 118, 210, 0.22);
+  outline-offset: 1px;
+}
+
+.alerts-toolbar__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+}
+
+.alerts-chip {
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1f2f39;
+  background: #e4ecf6;
+}
+
+.alerts-chip--pending {
+  background: rgba(251, 192, 45, 0.22);
+  color: #765700;
+}
+
+.alerts-chip--resolved {
+  background: rgba(129, 199, 132, 0.3);
+  color: #205724;
+}
+
+.alerts-result-count {
+  margin-left: auto;
+  font-size: 0.83rem;
+  color: var(--color-text-soft);
+}
+
 .alerts-state--error {
   border-color: #f3b5b5;
   background: #fff3f3;
@@ -302,6 +382,12 @@ a {
 .alert-card__message {
   margin: 0;
   color: #30404d;
+}
+
+.alert-card__details {
+  margin: 0.45rem 0 0;
+  color: #5b6d7b;
+  font-size: 0.82rem;
 }
 
 .alert-card__date {
@@ -438,6 +524,26 @@ a {
   .page-header {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .alerts-header-actions {
+    width: 100%;
+  }
+
+  .alerts-header-actions .alerts-btn,
+  .alerts-header-actions .alerts-btn-secondary {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .alerts-toolbar__controls {
+    grid-template-columns: 1fr;
+  }
+
+  .alerts-result-count {
+    width: 100%;
+    margin-left: 0;
   }
 
   .chart-grid {

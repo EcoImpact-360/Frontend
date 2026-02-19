@@ -5,6 +5,7 @@ export default function AlertCard({ alert, onResolve, disabled }) {
   const isResolved = Boolean(alert.resolved);
   const statusLabel = isResolved ? 'Resuelta' : 'Pendiente';
   const [isResolving, setIsResolving] = useState(false);
+  const details = [alert.category, alert.location, alert.assignedTo].filter(Boolean).join(' • ');
 
   const handleResolveClick = async () => {
     if (!onResolve) return;
@@ -30,6 +31,7 @@ export default function AlertCard({ alert, onResolve, disabled }) {
       </header>
 
       <p className="alert-card__message">{alert.message}</p>
+      {details && <p className="alert-card__details">{details}</p>}
 
       <small className="alert-card__date">
         {alert.createdAt ? new Date(alert.createdAt).toLocaleString() : 'Fecha no disponible'}
