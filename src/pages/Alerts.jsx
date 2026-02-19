@@ -59,16 +59,45 @@ export default function Alerts() {
 
   return (
     <div style={{ padding: "2rem", maxWidth: "840px", margin: "0 auto" }}>
+      <style>{`
+        .alerts-btn {
+          padding: 0.5rem 0.75rem;
+          border-radius: 8px;
+          border: 1px solid #D1D5DB;
+          background: #FFFFFF;
+          color: #111827;
+          font-weight: 500;
+          cursor: pointer;
+        }
+        .alerts-btn:hover {
+          background: #F9FAFB;
+        }
+        .alerts-btn:focus-visible {
+          outline: 3px solid #111827;
+          outline-offset: 2px;
+        }
+        .alerts-btn[disabled] {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      `}</style>
       <h1 style={{ marginTop: 0 }}>Alerts</h1>
 
-      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem" }}>
-        <button type="button" onClick={() => setScenario("success")}>
+      <div
+        style={{
+          display: "flex",
+          gap: "0.5rem",
+          justifyContent: "center",
+          marginBottom: "1.5rem",
+        }}
+      >
+        <button type="button" className="alerts-btn" onClick={() => setScenario("success")}>
           Simular exito
         </button>
-        <button type="button" onClick={() => setScenario("empty")}>
+        <button type="button" className="alerts-btn" onClick={() => setScenario("empty")}>
           Simular vacio
         </button>
-        <button type="button" onClick={() => setScenario("error")}>
+        <button type="button" className="alerts-btn" onClick={() => setScenario("error")}>
           Simular error
         </button>
       </div>
@@ -76,9 +105,13 @@ export default function Alerts() {
       {status === "loading" && <p>Cargando alertas...</p>}
 
       {status === "error" && (
-        <div>
+        <div style={{ textAlign: "center" }}>
           <p style={{ color: "#B91C1C" }}>{errorMessage}</p>
-          <button type="button" onClick={() => setReloadToken((value) => value + 1)}>
+          <button
+            type="button"
+            className="alerts-btn"
+            onClick={() => setReloadToken((value) => value + 1)}
+          >
             Reintentar
           </button>
         </div>

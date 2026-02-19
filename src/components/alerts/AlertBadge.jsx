@@ -1,9 +1,9 @@
 import React from "react";
 
 const BADGE_STYLES = {
-  low: { background: "#E8F5E9", color: "#1B5E20", label: "Baja" },
-  medium: { background: "#FFF8E1", color: "#E65100", label: "Media" },
-  high: { background: "#FFEBEE", color: "#B71C1C", label: "Alta" },
+  low: { background: "#E8F5E9", color: "#1B5E20", label: "Baja", icon: "ℹ️" },
+  medium: { background: "#FFF8E1", color: "#E65100", label: "Media", icon: "🔶" },
+  high: { background: "#FFEBEE", color: "#B71C1C", label: "Alta", icon: "⚠️" },
 };
 
 export default function AlertBadge({ severity }) {
@@ -20,7 +20,7 @@ export default function AlertBadge({ severity }) {
         padding: "0.25rem 0.625rem",
       }}
     >
-      {tone.label}
+      {tone.icon} {tone.label}
     </span>
   );
 }
