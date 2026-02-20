@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent} from "@testing-library/react";
 import { vi, describe, test, expect } from "vitest";
 import Alerts from "../pages/Alerts";
 import * as alertsApi from "../services/alertsApi";
