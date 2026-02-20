@@ -1,9 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import MetricCard from '../components/metrics/MetricCard';
-// ✅ Ruta corregida según tu explorador: de src/tests a src/utils
 import * as formatters from '../utils/formatters'; 
 
-// Mock de los formateadores
+
 vi.mock('../utils/formatters', () => ({
   formatCurrency: vi.fn((val) => `$${val}`),
   formatNumber: vi.fn((val) => `${val}`),
@@ -21,7 +20,6 @@ describe('MetricCard Component', () => {
     
     expect(screen.getByText('Peso Total')).toBeInTheDocument();
     expect(screen.getByText('150')).toBeInTheDocument();
-    // Verifica que se llamó a la utilidad de la carpeta utils
     expect(formatters.formatNumber).toHaveBeenCalledWith(150);
   });
 
@@ -43,8 +41,6 @@ describe('MetricCard Component', () => {
 
   test('debe mostrar la unidad junto al valor si existe', () => {
     render(<MetricCard title="Carga" value={80} unit="kg" />);
-    
-    // Regex para encontrar el texto aunque haya espacios o spans
     expect(screen.getByText(/80 kg/)).toBeInTheDocument();
   });
 

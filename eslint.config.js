@@ -16,8 +16,7 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: {
         ...globals.browser,
-        // ✅ Añadimos los globales de testing
-        ...globals.jest, 
+        ...globals.jest,
         vi: 'readonly',
       },
       parserOptions: {
@@ -29,9 +28,9 @@ export default defineConfig([
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { 
+      'no-unused-vars': ['error', {
         varsIgnorePattern: '^[A-Z_]',
-        argsIgnorePattern: '^_' // Útil para ignorar argumentos no usados como _err
+        argsIgnorePattern: '^_'
       }],
       'react-refresh/only-export-components': [
         'warn',
