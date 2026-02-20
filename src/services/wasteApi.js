@@ -1,9 +1,9 @@
 // Ejemplo de la función de envío en el Frontend
 export const submitWaste = async (formData) => {
-  // formData viene del formulario de React
+
   const payload = {
-    classroomId: parseInt(formData.aulaId), // Debe coincidir con el curl
-    wasteTypeId: parseInt(formData.tipoId), // Debe coincidir con el curl
+    classroomId: parseInt(formData.aulaId), 
+    wasteTypeId: parseInt(formData.tipoId), 
     quantityKg: parseFloat(formData.cantidad)
   };
 

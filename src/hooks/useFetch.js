@@ -1,23 +1,21 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import apiClient from '../api/apiClient';
 
-// Provides reusable HTTP fetching state and controls for React components.
 const useFetch = (url, options = {}) => {
   const { method = 'GET', body = null, dependencies = [], ...axiosOptions } = options;
-  
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const abortControllerRef = useRef(null);
 
-  // Executes the request, manages cancellation, and updates request state.
   const fetchData = useCallback(async () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    
+
     abortControllerRef.current = new AbortController();
-    
+
     setLoading(true);
     setError(null);
 
@@ -44,19 +42,16 @@ const useFetch = (url, options = {}) => {
     }
   }, [url, method, body, JSON.stringify(axiosOptions), ...dependencies]);
 
-  // Triggers the initial request and aborts it when the component unmounts.
   useEffect(() => {
     fetchData();
 
-    // Cancels any in-flight request to avoid state updates after unmount.
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
     };
-  }, [fetchData]);
 
-  // Exposes a manual way to run the same request again.
+  }, [fetchData]);
   const refetch = useCallback(() => {
     fetchData();
   }, [fetchData]);

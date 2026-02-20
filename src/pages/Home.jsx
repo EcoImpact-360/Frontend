@@ -1,6 +1,5 @@
 ﻿import { Link } from 'react-router-dom';
 
-// Displays the landing page and provides navigation to the dashboard.
 function Home() {
   return (
     <main className="page-shell page-shell--narrow">

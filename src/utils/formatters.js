@@ -1,11 +1,9 @@
-// Formats a date using Spanish locale and optional Intl overrides.
 export const formatDate = (date, options = {}) => {
   if (!date) return '';
   const defaultOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(date).toLocaleDateString('es-ES', { ...defaultOptions, ...options });
 };
 
-// Formats a numeric amount as currency using Spanish locale settings.
 export const formatCurrency = (amount, currency = 'USD') => {
   if (amount === null || amount === undefined) return '';
   return new Intl.NumberFormat('es-ES', {
@@ -14,7 +12,6 @@ export const formatCurrency = (amount, currency = 'USD') => {
   }).format(amount);
 };
 
-// Formats numbers with a fixed decimal precision.
 export const formatNumber = (number, decimals = 0) => {
   if (number === null || number === undefined) return '';
   return new Intl.NumberFormat('es-ES', {
@@ -23,13 +20,11 @@ export const formatNumber = (number, decimals = 0) => {
   }).format(number);
 };
 
-// Formats a value as a percentage string.
 export const formatPercentage = (value, decimals = 1) => {
   if (value === null || value === undefined) return '';
   return `${formatNumber(value, decimals)}%`;
 };
 
-// Returns a human-readable relative time string for a given date.
 export const formatRelativeTime = (date) => {
   if (!date) return '';
   const now = new Date();

@@ -23,7 +23,7 @@ export const handleApiError = (error) => {
   return error.message || 'Error desconocido';
 };
 
-// Builds a URL query string from an object, skipping empty values.
+
 export const buildQueryString = (params) => {
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
@@ -34,12 +34,10 @@ export const buildQueryString = (params) => {
   return searchParams.toString();
 };
 
-// Checks whether an HTTP status code is in the successful range.
 export const isSuccessfulResponse = (status) => {
   return status >= 200 && status < 300;
 };
 
-// Returns authorization headers when a token exists in localStorage.
 export const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
   return token ? { Authorization: `Bearer ${token}` } : {};

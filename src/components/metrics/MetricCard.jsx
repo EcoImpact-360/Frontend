@@ -1,6 +1,5 @@
 import { formatCurrency, formatNumber, formatPercentage } from '../../utils/formatters';
 
-// Shows a single metric value with optional icon and trend indicator.
 function MetricCard({ title, value, type = 'number', unit, icon, trend }) {
   const formatValue = () => {
     switch (type) {

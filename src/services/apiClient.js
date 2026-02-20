@@ -1,5 +1,4 @@
 const DEFAULT_TIMEOUT_MS = 10000;
-// URL base de tu backend Spring Boot
 const BASE_URL = "http://localhost:8080/api/v1";
 
 function normalizeError(err, context) {
@@ -34,9 +33,8 @@ function normalizeError(err, context) {
 }
 
 /**
- * Función central para realizar peticiones al backend.
- * @param {string} path - El endpoint (ej: "/alerts/pending")
- * @param {object} options - Configuración (method, body, headers, etc.)
+ * @param {string} path 
+ * @param {object} options 
  */
 export async function request(path, options = {}) {
   const {
@@ -46,8 +44,6 @@ export async function request(path, options = {}) {
     timeout = DEFAULT_TIMEOUT_MS,
   } = options;
 
-  // Construye la URL completa uniendo la base con el path
-  // Si el path ya empieza por http, lo usa tal cual; si no, le añade la BASE_URL
   const url = path.startsWith("http") ? path : `${BASE_URL}${path}`;
 
   const controller = new AbortController();
@@ -62,7 +58,6 @@ export async function request(path, options = {}) {
   const hasBody = body !== undefined && body !== null;
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
 
-  // Si enviamos un objeto, lo convertimos a JSON y aseguramos el Header correcto
   if (hasBody && !isFormData && typeof body === "object") {
     payload = JSON.stringify(body);
     if (!finalHeaders["Content-Type"]) {
@@ -90,7 +85,7 @@ export async function request(path, options = {}) {
       try {
         data = JSON.parse(text);
       } catch {
-        data = text; // Si no es JSON, devuelve el texto plano
+        data = text; 
       }
     }
 
@@ -98,7 +93,6 @@ export async function request(path, options = {}) {
       return data;
     }
 
-    // Manejo de errores del servidor (400, 404, 500...)
     const message = data && typeof data === "object" ? (data.message || data.error) : "Error en la petición";
 
     throw {

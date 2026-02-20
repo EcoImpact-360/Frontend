@@ -3,7 +3,6 @@ import { vi, describe, test, expect } from "vitest";
 import Alerts from "../pages/Alerts";
 import * as alertsApi from "../services/alertsApi";
 
-// Mockeamos el módulo completo
 vi.mock("../services/alertsApi", () => ({
   getAlerts: vi.fn(),
   resolveAlert: vi.fn()

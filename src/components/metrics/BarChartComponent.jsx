@@ -1,6 +1,5 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Renders a reusable bar chart card for metric comparisons.
 function BarChartComponent({ data, dataKey, xAxisKey = 'name', title }) {
   return (
     <section className="surface-card chart-card">
