@@ -16,7 +16,7 @@ describe('AlertFormModal Component', () => {
     expect(screen.getByLabelText('Tipo de residuo (opcional)')).toBeInTheDocument();
     expect(screen.getByText('Aula 1A')).toBeInTheDocument();
   });
-  test('en modo edicion no muestra los selects de aula ni tipo de residuo y precarga los valores', () => {
+  test('en modo edicion no muestra el select de aula pero si el de tipo de residuo, precargados', () => {
     render(
       <AlertFormModal
         open
@@ -30,6 +30,7 @@ describe('AlertFormModal Component', () => {
     );
     expect(screen.getByText('Editar alerta')).toBeInTheDocument();
     expect(screen.queryByLabelText('Aula')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Tipo de residuo (opcional)')).toHaveValue('5');
     expect(screen.getByDisplayValue('Titulo previo')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Mensaje previo')).toBeInTheDocument();
     expect(screen.getByDisplayValue('4')).toBeInTheDocument();
@@ -92,7 +93,28 @@ describe('AlertFormModal Component', () => {
     fireEvent.change(screen.getByLabelText('Titulo'), { target: { value: 'Titulo nuevo' } });
     fireEvent.click(screen.getByRole('button', { name: /Guardar cambios/i }));
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith({ title: 'Titulo nuevo', message: null, totalKg: null });
+      expect(onSubmit).toHaveBeenCalledWith({ title: 'Titulo nuevo', message: null, wasteTypeId: null, totalKg: null });
+    });
+  });
+  test('permite cambiar el tipo de residuo al editar una alerta', async () => {
+    const onSubmit = vi.fn().mockResolvedValue();
+    render(
+      <AlertFormModal
+        open
+        mode="edit"
+        initialValues={{ classroomId: 1, wasteTypeId: 5, title: 'Titulo previo', message: '', totalKg: null }}
+        classrooms={classrooms}
+        wasteTypes={[...wasteTypes, { id: 6, name: 'Papel' }]}
+        onClose={vi.fn()}
+        onSubmit={onSubmit}
+      />
+    );
+    fireEvent.change(screen.getByLabelText('Tipo de residuo (opcional)'), { target: { value: '6' } });
+    fireEvent.click(screen.getByRole('button', { name: /Guardar cambios/i }));
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({ wasteTypeId: 6 })
+      );
     });
   });
   test('muestra el error devuelto por onSubmit y no cierra el modal', async () => {

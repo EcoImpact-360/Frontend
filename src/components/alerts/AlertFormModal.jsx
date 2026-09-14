@@ -59,6 +59,7 @@ export default function AlertFormModal({
       ? {
           title: form.title.trim(),
           message: form.message.trim() || null,
+          wasteTypeId: form.wasteTypeId ? Number(form.wasteTypeId) : null,
           totalKg: form.totalKg ? Number(form.totalKg) : null,
         }
       : {
@@ -101,19 +102,17 @@ export default function AlertFormModal({
               </select>
             </label>
           )}
-          {!isEdit && (
-            <label className="alerts-field">
-              <span>Tipo de residuo (opcional)</span>
-              <select className="alerts-select" value={form.wasteTypeId} onChange={handleChange('wasteTypeId')}>
-                <option value="">Sin especificar</option>
-                {wasteTypes.map((wasteType) => (
-                  <option key={wasteType.id} value={wasteType.id}>
-                    {wasteType.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
+          <label className="alerts-field">
+            <span>Tipo de residuo (opcional)</span>
+            <select className="alerts-select" value={form.wasteTypeId} onChange={handleChange('wasteTypeId')}>
+              <option value="">Sin especificar</option>
+              {wasteTypes.map((wasteType) => (
+                <option key={wasteType.id} value={wasteType.id}>
+                  {wasteType.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <label className="alerts-field">
             <span>Titulo</span>
             <input
