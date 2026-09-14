@@ -1,11 +1,20 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+function createMemoryStorage() {
+  let store = {};
+  return {
+    getItem: (key) => (Object.prototype.hasOwnProperty.call(store, key) ? store[key] : null),
+    setItem: (key, value) => {
+      store[key] = String(value);
+    },
+    removeItem: (key) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+  };
+}
 Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: vi.fn(() => null), 
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-  },
+  value: createMemoryStorage(),
   writable: true,
 });

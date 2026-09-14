@@ -4,6 +4,8 @@ import Dashboard from '../pages/Dashboard';
 import AlertsPage from '../pages/Alerts';
 import RegisterWaste from '../pages/RegisterWaste';
 import RegisterSchool from '../pages/RegisterSchool';
+import Login from '../pages/Login';
+import RequireAuth from '../components/routing/RequireAuth';
 function NotFound() {
   return (
     <main className="page-shell page-shell--narrow">
@@ -19,10 +21,32 @@ function Router() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/alerts" element={<AlertsPage />} />
-      <Route path="/register" element={<RegisterWaste />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/register-school" element={<RegisterSchool />} />
+      <Route
+        path="/dashboard"
+        element={
+          <RequireAuth>
+            <Dashboard />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/alerts"
+        element={
+          <RequireAuth>
+            <AlertsPage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <RequireAuth>
+            <RegisterWaste />
+          </RequireAuth>
+        }
+      />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

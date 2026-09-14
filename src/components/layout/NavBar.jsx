@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 const LINKS = [
   { to: '/', label: 'Inicio', end: true },
   { to: '/dashboard', label: 'Dashboard' },
@@ -7,6 +8,12 @@ const LINKS = [
   { to: '/register-school', label: 'Registrar Colegio' },
 ];
 function NavBar() {
+  const { isAuthenticated, school, logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
   return (
     <nav className="app-nav">
       <div className="app-nav__inner">
@@ -24,6 +31,23 @@ function NavBar() {
               {link.label}
             </NavLink>
           ))}
+          {isAuthenticated ? (
+            <>
+              <span className="app-nav__link" aria-label="Colegio conectado">
+                {school?.name}
+              </span>
+              <button type="button" className="app-nav__link app-nav__link--button" onClick={handleLogout}>
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <NavLink
+              to="/login"
+              className={({ isActive }) => `app-nav__link${isActive ? ' app-nav__link--active' : ''}`}
+            >
+              Iniciar sesión
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Toast from './components/alerts/Toast';
 import NavBar from './components/layout/NavBar';
+import { AuthProvider } from './context/AuthContext';
 import Router from './router';
 function App() {
   const [toast, setToast] = useState({ message: null, type: 'success' });
@@ -9,15 +10,17 @@ function App() {
     setToast({ ...toast, message: null });
   };
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        onClose={hideToast}
-      />
-      <Router />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <NavBar />
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={hideToast}
+        />
+        <Router />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 export default App;

@@ -1,3 +1,4 @@
+import { getToken, clearSession } from "./authStorage";
 const DEFAULT_TIMEOUT_MS = 10000;
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
 function normalizeError(err, context) {
@@ -37,8 +38,10 @@ export async function request(path, options = {}) {
   const url = path.startsWith("http") ? path : `${BASE_URL}${path}`;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
+  const token = getToken();
   const finalHeaders = {
     "Accept": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...headers,
   };
   let payload = body;
@@ -71,6 +74,9 @@ export async function request(path, options = {}) {
     }
     if (response.ok) {
       return data;
+    }
+    if (response.status === 401) {
+      clearSession();
     }
     const message = data && typeof data === "object" ? (data.message || data.error) : "Error en la petición";
     throw {

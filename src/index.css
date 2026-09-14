@@ -87,6 +87,12 @@ a {
   background: rgba(25, 118, 210, 0.12);
   color: var(--color-secondary);
 }
+.app-nav__link--button {
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+}
 .page-shell {
   width: min(1160px, calc(100% - 2.5rem));
   margin: 0 auto;
