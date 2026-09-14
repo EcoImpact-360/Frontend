@@ -234,7 +234,7 @@ export default function Alerts() {
       )}
       {status === 'empty' && (
         <div className="alerts-state alerts-state--empty">
-          <p>No hay alertas pendientes de resoluci\u00f3n.</p>
+          <p>No hay alertas pendientes de resolución.</p>
         </div>
       )}
       {status === 'success' && filteredAlerts.length === 0 && (
