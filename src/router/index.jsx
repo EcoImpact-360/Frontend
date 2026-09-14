@@ -2,6 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 import AlertsPage from '../pages/Alerts';
+import RegisterWaste from '../pages/RegisterWaste';
 function NotFound() {
   return (
     <main className="page-shell page-shell--narrow">
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/" element={<Home />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/alerts" element={<AlertsPage />} />
+      <Route path="/register" element={<RegisterWaste />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

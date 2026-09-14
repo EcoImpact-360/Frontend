@@ -1,12 +1,15 @@
 import { request } from "../services/apiClient";
 export const dashboardApi = {
   getMetrics: () => request("/dashboard/global", { method: "GET" }),
-  getAulasData: async () => {
+  getCo2Ranking: async () => {
     const data = await request("/ranking", { method: "GET" });
-    return data.map(item => ({
-      name: item.classroomName,
-      reciclables: item.totalWeight,
-      puntos: item.totalPoints
-    }));
+    return Array.isArray(data)
+      ? data.map(item => ({
+          name: item.classroomName,
+          co2: item.totalCo2,
+          agua: item.totalWaterSaved,
+          registros: item.totalEntries,
+        }))
+      : [];
   }
 };
