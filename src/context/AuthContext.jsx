@@ -1,10 +1,18 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { login as loginRequest } from '../services/authApi';
-import { getToken, getSchool, setSession, clearSession } from '../services/authStorage';
+import { getToken, getSchool, setSession, clearSession, SESSION_CLEARED_EVENT } from '../services/authStorage';
 const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => getToken());
   const [school, setSchool] = useState(() => getSchool());
+  useEffect(() => {
+    const handleSessionCleared = () => {
+      setToken(null);
+      setSchool(null);
+    };
+    window.addEventListener(SESSION_CLEARED_EVENT, handleSessionCleared);
+    return () => window.removeEventListener(SESSION_CLEARED_EVENT, handleSessionCleared);
+  }, []);
   const login = async (name, password) => {
     const response = await loginRequest(name, password);
     setSession(response.token, { id: response.schoolId, name: response.schoolName });

@@ -1,5 +1,6 @@
 const TOKEN_KEY = "ecoimpact_token";
 const SCHOOL_KEY = "ecoimpact_school";
+export const SESSION_CLEARED_EVENT = "ecoimpact:session-cleared";
 export function getToken() {
   try {
     return localStorage.getItem(TOKEN_KEY);
@@ -29,5 +30,8 @@ export function clearSession() {
     localStorage.removeItem(SCHOOL_KEY);
   } catch {
     /* localStorage no disponible */
+  }
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(SESSION_CLEARED_EVENT));
   }
 }
