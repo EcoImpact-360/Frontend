@@ -69,6 +69,10 @@ a {
   gap: 0.4rem;
   flex-wrap: nowrap;
 }
+.app-nav__links--account {
+  margin-left: auto;
+  align-items: center;
+}
 .app-nav__link {
   white-space: nowrap;
   text-decoration: none;
