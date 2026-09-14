@@ -1,16 +1,15 @@
 # Informe Técnico del Proyecto Frontend
 
 ## 1. Resumen General
-Este proyecto es una aplicación frontend construida con React y Vite para visualizar un dashboard de gestión de residuos en colegios. Consume datos desde un backend simulado con `json-server` usando endpoints REST (por ejemplo: `/aulas` y `/contenedores`).
+Este proyecto es una aplicación frontend construida con React y Vite para visualizar un dashboard de gestión de residuos en colegios. Consume datos del backend real (Spring Boot, ver `Backend/`) a través de su API REST (`/api/v1/...`).
 
-Actualmete solo se muestran  métricas, tarjetas y gráficas a partir de datos reales de `db.json`, con una arquitectura simple y modular.
+Muestra métricas globales, ranking de aulas y alertas a partir de datos reales servidos por el backend, con una arquitectura simple y modular.
 
 ## 2. Estructura de Carpetas y Qué Hace Cada Una
 
 ### Raíz del proyecto
 - `package.json`: define scripts y dependencias del proyecto.
-- `db.json`: base de datos fake consumida por `json-server`.
-- `.env` y `.env.example`: variables de entorno (por ejemplo `VITE_API_URL`).
+- `.env` y `.env.example`: variables de entorno (`VITE_API_URL`, la URL base del backend).
 - `vite.config.js`: configuración de Vite.
 - `eslint.config.js`: reglas de linting del proyecto.
 - `index.html`: HTML principal donde se monta React.
@@ -28,12 +27,14 @@ Configura el router global con `BrowserRouter` y delega rutas a `src/router/inde
 - `index.jsx`: define rutas:
 - `/` -> `Home`
 - `/dashboard` -> `Dashboard`
+- `/alerts` -> `Alerts`
 - `*` -> página `404`
 
 #### `src/pages/`
 Contiene vistas de alto nivel.
 - `Home.jsx`: página inicial con enlace al dashboard.
-- `Dashboard.jsx`: vista principal de métricas y gráficas. Aquí se consumen `/aulas` y `/contenedores` usando `useFetch`.
+- `Dashboard.jsx`: vista principal de métricas y gráficas, usando `api/dashboardApi.js`.
+- `Alerts.jsx`: listado y resolución de alertas.
 
 #### `src/components/metrics/`
 Componentes reutilizables de visualización de métricas.
@@ -41,67 +42,54 @@ Componentes reutilizables de visualización de métricas.
 - `BarChartComponent.jsx`: gráfico de barras con Recharts.
 - `LineChartComponent.jsx`: gráfico de líneas con Recharts.
 
-#### `src/api/`
-Capa de acceso a datos (servicios HTTP).
-- `apiClient.js`: instancia de Axios con `baseURL`, headers e interceptores.
-- `dashboardApi.js`: funciones para CRUD y métricas de `aulas` y `contenedores`.
+#### `src/components/alerts/`
+- `AlertBadge.jsx`, `AlertCard.jsx`, `ResolveAlertModal.jsx`, `Toast.jsx`: UI de la página de alertas.
 
-#### `src/hooks/`
-- `useFetch.js`: hook reutilizable para peticiones HTTP con manejo de `loading`, `error`, `data`, `refetch` y cancelación (`AbortController`).
+#### `src/api/` y `src/services/`
+Capa de acceso a datos. Todo pasa por un único helper HTTP basado en `fetch`:
+- `services/apiClient.js`: función `request(path, options)` — timeout, `AbortController`, y normalización de errores de red/HTTP a un formato consistente (`{status, code, message, details}`).
+- `api/dashboardApi.js`: usa `request` para `/dashboard/global` y `/ranking` (consumido por `Dashboard.jsx`).
+- `services/alertsApi.js`: **de momento simula el backend de alertas en `localStorage`** (no llama a `/api/v1/alerts` todavía), para poder demostrar la UI de alertas sin depender de que ese endpoint esté completo en el backend. Cuando el backend de alertas esté listo, esto debería migrarse a `request(...)` igual que `dashboardApi.js`.
+
+> Antes existían un segundo cliente HTTP basado en Axios (`api/apiClient.js` + el hook `useFetch`) y varias funciones de servicio sin usar (`services/dashboardApi.js`, `services/rankingApi.js`, `services/wasteApi.js`). Se eliminaron por ser código muerto duplicado; toda la app usa ahora un único cliente HTTP (`services/apiClient.js`).
 
 #### `src/utils/`
-Utilidades compartidas.
 - `formatters.js`: formateadores de fecha, moneda, número, porcentaje y tiempo relativo.
-- `apiHelpers.js`: manejo de errores de API, query strings, validación de estados HTTP y headers de autenticación.
 
 #### `src/composables/`
-- `apiConfig.js`: centraliza la URL base (`API_URL`) desde `import.meta.env.VITE_API_URL`.
+- `apiConfig.js`: define `API_URL` desde `import.meta.env.VITE_API_URL` (no se usa en la ruta activa de peticiones, que centraliza la base URL en `services/apiClient.js`; queda como config auxiliar).
 
-#### `src/historias /`
-Documentación funcional/técnica en formato Markdown.
-- `tarea1.md`, `tareas2.md`, `tarea3.md`: historias de usuario y tareas.
-- `Informe.md`: este informe.
+#### `src/tests/`
+Tests con Vitest + Testing Library (`AlertCard`, `Dashboard`, `MetricCard`).
 
 ## 3. Cómo se Conectan las Carpetas (Flujo)
 1. `main.jsx` monta `App.jsx`.
 2. `App.jsx` habilita `BrowserRouter`.
-3. `router/index.jsx` decide qué página cargar (`Home` o `Dashboard`).
-4. `Dashboard.jsx` consume datos con `useFetch`.
-5. `useFetch` usa `apiClient.js` (Axios).
-6. `apiClient.js` usa `API_URL` desde `composables/apiConfig.js`.
-7. El backend fake (`json-server`) responde con datos de `db.json`.
-8. `Dashboard.jsx` transforma datos y los muestra con `MetricCard` y `BarChartComponent`.
-9. `utils/formatters.js` formatea valores en componentes de UI.
+3. `router/index.jsx` decide qué página cargar (`Home`, `Dashboard` o `Alerts`).
+4. `Dashboard.jsx` consume datos con `api/dashboardApi.js`, que usa `services/apiClient.js` (`fetch` + timeout + manejo de errores) contra el backend real en `VITE_API_URL`.
+5. `Alerts.jsx` consume datos con `services/alertsApi.js` (mock en `localStorage`, ver nota arriba).
+6. Las páginas transforman los datos y los muestran con `MetricCard`, `BarChartComponent`, `AlertCard`, etc.
+7. `utils/formatters.js` formatea valores en los componentes de UI.
 
-## 4. Contenido de Datos (db.json)
-`db.json` contiene tres colecciones principales:
-- `users`: gestores de limpieza con secciones asignadas.
-- `aulas`: cubos por día (basura/reciclables), total semanal y gestor asociado.
-- `contenedores`: ubicación, capacidad, nivel actual y depósitos por aula.
+## 4. Notas Técnicas
+- Arquitectura por capas: `pages` (vista), `components` (UI reusable), `api`/`services` (acceso a datos), `utils` (helpers).
+- Un único cliente HTTP (`services/apiClient.js`) centraliza timeout, cancelación y normalización de errores; evita que cada llamada reimplemente su propio manejo de errores.
+- La página de Alertas todavía no está conectada al backend real (ver nota en `services/alertsApi.js`); es la pieza pendiente más visible de cara a producción.
+- Ver `../../DEPLOY.md` (raíz del monorepo) para cómo se construye y despliega el frontend con Docker.
 
-Esto permite simular escenarios reales de lectura y operaciones CRUD.
-
-## 5. Notas Técnicas
-- Se usa una arquitectura por capas: `pages` (vista), `components` (UI reusable), `hooks` (lógica), `api` (acceso a datos), `utils` (helpers).
-- La URL del backend está centralizada, facilitando migrar de `json-server` a una API real sin refactor amplio.
-- `Dashboard.jsx` ya no depende de mocks hardcodeados para métricas principales.
-- Existe lógica de interceptores para token y manejo de `401` en `apiClient.js`.
-- El script `npm run server` levanta `json-server` en el puerto `3000`.
-
-## 6. Tecnologías Usadas
+## 5. Tecnologías Usadas
 - React 19
 - Vite
 - React Router DOM
-- Axios
 - Recharts
-- json-server (backend fake para desarrollo)
+- Vitest + Testing Library
 - ESLint
 - JavaScript (ES Modules)
 - HTML/CSS
 
-## 7. Scripts Principales
+## 6. Scripts Principales
 - `npm run dev`: inicia frontend en modo desarrollo.
 - `npm run build`: compila para producción.
 - `npm run preview`: previsualiza build.
 - `npm run lint`: ejecuta linting.
-- `npm run server`: inicia `json-server` con `db.json` en `http://localhost:3000`.
+- `npm test`: ejecuta la suite de tests (Vitest).
