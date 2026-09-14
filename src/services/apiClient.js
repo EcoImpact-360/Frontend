@@ -1,5 +1,5 @@
 const DEFAULT_TIMEOUT_MS = 10000;
-const BASE_URL = "http://localhost:8080/api/v1";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/api/v1";
 
 function normalizeError(err, context) {
   if (err && typeof err === "object" && "status" in err && "code" in err) {
