@@ -90,6 +90,11 @@ function RegisterWaste() {
                   </option>
                 ))}
               </select>
+              {classrooms.length === 0 && (
+                <small>
+                  No hay aulas todavia. <Link to="/register-school">Registra tu colegio y aula aqui</Link>.
+                </small>
+              )}
             </label>
             <label className="alerts-field">
               <span>Tipo de residuo</span>

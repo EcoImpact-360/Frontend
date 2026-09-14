@@ -3,6 +3,7 @@ import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 import AlertsPage from '../pages/Alerts';
 import RegisterWaste from '../pages/RegisterWaste';
+import RegisterSchool from '../pages/RegisterSchool';
 function NotFound() {
   return (
     <main className="page-shell page-shell--narrow">
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/alerts" element={<AlertsPage />} />
       <Route path="/register" element={<RegisterWaste />} />
+      <Route path="/register-school" element={<RegisterSchool />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -15,6 +15,9 @@ function Home() {
           <Link to="/alerts" className="alerts-btn-secondary link-btn">
             Ir a las Alertas
           </Link>
+          <Link to="/register-school" className="alerts-btn-secondary link-btn">
+            Registrar Colegio
+          </Link>
         </div>
       </section>
     </main>
