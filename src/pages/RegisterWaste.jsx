@@ -77,7 +77,15 @@ function RegisterWaste() {
       {!loadingCatalog && catalogError && (
         <div className="alerts-state alerts-state--error">{catalogError}</div>
       )}
-      {!loadingCatalog && !catalogError && (
+      {!loadingCatalog && !catalogError && classrooms.length === 0 && (
+        <div className="alerts-state alerts-state--empty">
+          <p>Todavia no hay ningun colegio ni aula registrados. Registra tu colegio primero para poder anotar residuos.</p>
+          <Link to="/register-school" className="alerts-btn link-btn">
+            Registrar Colegio
+          </Link>
+        </div>
+      )}
+      {!loadingCatalog && !catalogError && classrooms.length > 0 && (
         <form className="surface-card alerts-toolbar" onSubmit={handleSubmit}>
           <div className="alerts-toolbar__controls">
             <label className="alerts-field">
@@ -90,11 +98,6 @@ function RegisterWaste() {
                   </option>
                 ))}
               </select>
-              {classrooms.length === 0 && (
-                <small>
-                  No hay aulas todavia. <Link to="/register-school">Registra tu colegio y aula aqui</Link>.
-                </small>
-              )}
             </label>
             <label className="alerts-field">
               <span>Tipo de residuo</span>

@@ -48,4 +48,15 @@ describe('RegisterWaste Component', () => {
         });
         expect(await screen.findByText('Impacto de este registro')).toBeInTheDocument();
     });
+    test('debe bloquear el registro si no hay ningun colegio/aula registrados', async () => {
+        getClassrooms.mockResolvedValue([]);
+        render(
+            <MemoryRouter>
+                <RegisterWaste />
+            </MemoryRouter>
+        );
+        expect(await screen.findByText(/Todavia no hay ningun colegio ni aula registrados/i)).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Registrar Colegio/i })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /^Registrar$/i })).not.toBeInTheDocument();
+    });
 });

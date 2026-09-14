@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import Toast from './components/alerts/Toast'; 
+import Toast from './components/alerts/Toast';
+import NavBar from './components/layout/NavBar';
 import Router from './router';
 function App() {
   const [toast, setToast] = useState({ message: null, type: 'success' });
@@ -9,6 +10,7 @@ function App() {
   };
   return (
     <BrowserRouter>
+      <NavBar />
       <Toast
         message={toast.message}
         type={toast.type}
