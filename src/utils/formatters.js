@@ -3,7 +3,6 @@ export const formatDate = (date, options = {}) => {
   const defaultOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(date).toLocaleDateString('es-ES', { ...defaultOptions, ...options });
 };
-
 export const formatCurrency = (amount, currency = 'USD') => {
   if (amount === null || amount === undefined) return '';
   return new Intl.NumberFormat('es-ES', {
@@ -11,7 +10,6 @@ export const formatCurrency = (amount, currency = 'USD') => {
     currency,
   }).format(amount);
 };
-
 export const formatNumber = (number, decimals = 0) => {
   if (number === null || number === undefined) return '';
   return new Intl.NumberFormat('es-ES', {
@@ -19,12 +17,10 @@ export const formatNumber = (number, decimals = 0) => {
     maximumFractionDigits: decimals,
   }).format(number);
 };
-
 export const formatPercentage = (value, decimals = 1) => {
   if (value === null || value === undefined) return '';
   return `${formatNumber(value, decimals)}%`;
 };
-
 export const formatRelativeTime = (date) => {
   if (!date) return '';
   const now = new Date();
@@ -33,7 +29,6 @@ export const formatRelativeTime = (date) => {
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
-
   if (diffMins < 1) return 'Ahora mismo';
   if (diffMins < 60) return `Hace ${diffMins} minuto${diffMins > 1 ? 's' : ''}`;
   if (diffHours < 24) return `Hace ${diffHours} hora${diffHours > 1 ? 's' : ''}`;

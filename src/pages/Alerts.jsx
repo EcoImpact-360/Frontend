@@ -4,19 +4,16 @@ import AlertCard from '../components/alerts/AlertCard';
 import ResolveAlertModal from '../components/alerts/ResolveAlertModal';
 import Toast from '../components/alerts/Toast';
 import { getAlerts, resolveAlert } from '../services/alertsApi';
-
 const SEVERITY_ORDER = {
   high: 3,
   medium: 2,
   low: 1,
 };
-
 const parseDate = (value) => {
   if (!value) return 0;
   const parsed = Date.parse(value);
   return Number.isNaN(parsed) ? 0 : parsed;
 };
-
 export default function Alerts() {
   const [status, setStatus] = useState('loading');
   const [alerts, setAlerts] = useState([]);
@@ -30,7 +27,6 @@ export default function Alerts() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
   const toastTimeoutRef = useRef(null);
-
   const showToast = (type, message) => {
     setToast({ type, message });
     if (toastTimeoutRef.current) {
@@ -40,23 +36,19 @@ export default function Alerts() {
       setToast(null);
     }, 3500);
   };
-
   const handleCloseToast = () => {
     if (toastTimeoutRef.current) {
       window.clearTimeout(toastTimeoutRef.current);
     }
     setToast(null);
   };
-
   useEffect(() => {
     let isActive = true;
     setStatus('loading');
     setErrorMessage('');
-
     getAlerts()
       .then((data) => {
         if (!isActive) return;
-
         const payload = Array.isArray(data) ? data : [];
         setAlerts(payload);
         setStatus(payload.length ? 'success' : 'empty');
@@ -66,25 +58,20 @@ export default function Alerts() {
         setStatus('error');
         setErrorMessage(err?.message || 'Error al conectar con el servidor.');
       });
-
     return () => {
       isActive = false;
     };
   }, [reloadToken]);
-
   const handleOpenResolve = (alert) => {
     setSelectedAlert(alert);
   };
-
   const handleConfirmResolve = async () => {
     if (!selectedAlert) return;
-
     setIsResolving(true);
     try {
       await resolveAlert(selectedAlert.id);
       const data = await getAlerts();
       const payload = Array.isArray(data) ? data : [];
-
       setAlerts(payload);
       setStatus(payload.length ? 'success' : 'empty');
       showToast('success', 'Alerta resuelta correctamente.');
@@ -95,78 +82,61 @@ export default function Alerts() {
       setSelectedAlert(null);
     }
   };
-
   const filteredAlerts = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
-
     let result = alerts.filter((alert) => {
       const searchable = [alert.title, alert.message, alert.category, alert.location, alert.assignedTo]
         .filter(Boolean)
         .join(' ')
         .toLowerCase();
-
       if (query && !searchable.includes(query)) {
         return false;
       }
-
       if (severityFilter !== 'all' && alert.severity !== severityFilter) {
         return false;
       }
-
       if (statusFilter === 'pending' && alert.resolved) {
         return false;
       }
-
       if (statusFilter === 'resolved' && !alert.resolved) {
         return false;
       }
-
       return true;
     });
-
     result = [...result].sort((a, b) => {
       if (sortBy === 'oldest') {
         return parseDate(a.createdAt) - parseDate(b.createdAt);
       }
-
       if (sortBy === 'severity') {
         const severityDiff = (SEVERITY_ORDER[b.severity] || 0) - (SEVERITY_ORDER[a.severity] || 0);
         if (severityDiff !== 0) return severityDiff;
         return parseDate(b.createdAt) - parseDate(a.createdAt);
       }
-
       if (sortBy === 'pending-first') {
         if (a.resolved !== b.resolved) {
           return a.resolved ? 1 : -1;
         }
         return parseDate(b.createdAt) - parseDate(a.createdAt);
       }
-
       return parseDate(b.createdAt) - parseDate(a.createdAt);
     });
-
     return result;
   }, [alerts, searchTerm, severityFilter, statusFilter, sortBy]);
-
   const pendingCount = useMemo(() => alerts.filter((alert) => !alert.resolved).length, [alerts]);
   const resolvedCount = alerts.length - pendingCount;
   const hasActiveFilters =
     searchTerm.trim().length > 0 || severityFilter !== 'all' || statusFilter !== 'all' || sortBy !== 'recent';
-
   const handleResolveVisible = async () => {
     const pendingVisible = filteredAlerts.filter((alert) => !alert.resolved);
-
     if (!pendingVisible.length) {
       showToast('error', 'No hay alertas pendientes en la vista actual.');
       return;
     }
-
     setIsResolving(true);
     try {
       await Promise.all(pendingVisible.map((alert) => resolveAlert(alert.id)));
       const data = await getAlerts();
       const payload = Array.isArray(data) ? data : [];
-
       setAlerts(payload);
       setStatus(payload.length ? 'success' : 'empty');
       showToast('success', `${pendingVisible.length} alertas resueltas en bloque.`);
@@ -176,18 +146,15 @@ export default function Alerts() {
       setIsResolving(false);
     }
   };
-
   const clearFilters = () => {
     setSearchTerm('');
     setSeverityFilter('all');
     setStatusFilter('all');
     setSortBy('recent');
   };
-
   return (
     <main className="page-shell page-shell--narrow">
       <Toast type={toast?.type} message={toast?.message} onClose={handleCloseToast} />
-
       <header className="page-header">
         <div>
           <h1 className="page-title">Panel de Alertas</h1>
@@ -205,7 +172,6 @@ export default function Alerts() {
           </button>
         </div>
       </header>
-
       <section className="surface-card alerts-toolbar">
         <div className="alerts-toolbar__controls">
           <label className="alerts-field">
@@ -218,7 +184,6 @@ export default function Alerts() {
               onChange={(event) => setSearchTerm(event.target.value)}
             />
           </label>
-
           <label className="alerts-field">
             <span>Estado</span>
             <select className="alerts-select" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
@@ -227,7 +192,6 @@ export default function Alerts() {
               <option value="resolved">Resueltas</option>
             </select>
           </label>
-
           <label className="alerts-field">
             <span>Severidad</span>
             <select className="alerts-select" value={severityFilter} onChange={(event) => setSeverityFilter(event.target.value)}>
@@ -237,7 +201,6 @@ export default function Alerts() {
               <option value="low">Baja</option>
             </select>
           </label>
-
           <label className="alerts-field">
             <span>Orden</span>
             <select className="alerts-select" value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
@@ -248,7 +211,6 @@ export default function Alerts() {
             </select>
           </label>
         </div>
-
         <div className="alerts-toolbar__meta">
           <div className="alerts-chip">Total: {alerts.length}</div>
           <div className="alerts-chip alerts-chip--pending">Pendientes: {pendingCount}</div>
@@ -261,9 +223,7 @@ export default function Alerts() {
           )}
         </div>
       </section>
-
       {status === 'loading' && <div className="alerts-state">Cargando alertas desde el servidor...</div>}
-
       {status === 'error' && (
         <div className="alerts-state alerts-state--error">
           <p>{errorMessage}</p>
@@ -272,13 +232,11 @@ export default function Alerts() {
           </button>
         </div>
       )}
-
       {status === 'empty' && (
         <div className="alerts-state alerts-state--empty">
           <p>No hay alertas pendientes de resoluci\u00f3n.</p>
         </div>
       )}
-
       {status === 'success' && filteredAlerts.length === 0 && (
         <div className="alerts-state alerts-state--empty">
           <p>No hay alertas que coincidan con los filtros actuales.</p>
@@ -289,7 +247,6 @@ export default function Alerts() {
           )}
         </div>
       )}
-
       {status === 'success' && filteredAlerts.length > 0 && (
         <section className="alerts-list">
           {filteredAlerts.map((alert) => (
@@ -297,7 +254,6 @@ export default function Alerts() {
           ))}
         </section>
       )}
-
       <ResolveAlertModal
         open={Boolean(selectedAlert)}
         alert={selectedAlert}

@@ -1,5 +1,4 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
 function BarChartComponent({ data, dataKey, xAxisKey = 'name', title }) {
   return (
     <section className="surface-card chart-card">
@@ -22,5 +21,4 @@ function BarChartComponent({ data, dataKey, xAxisKey = 'name', title }) {
     </section>
   );
 }
-
 export default BarChartComponent;

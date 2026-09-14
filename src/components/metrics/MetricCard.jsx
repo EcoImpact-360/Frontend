@@ -1,5 +1,4 @@
 import { formatCurrency, formatNumber, formatPercentage } from '../../utils/formatters';
-
 function MetricCard({ title, value, type = 'number', unit, icon, trend }) {
   const formatValue = () => {
     switch (type) {
@@ -11,10 +10,8 @@ function MetricCard({ title, value, type = 'number', unit, icon, trend }) {
         return formatNumber(value);
     }
   };
-
   const trendClass = trend >= 0 ? 'metric-card__trend metric-card__trend--up' : 'metric-card__trend metric-card__trend--down';
   const displayValue = unit ? `${formatValue()} ${unit}` : formatValue();
-
   return (
     <article className="surface-card metric-card">
       <p className="metric-card__label">{title}</p>
@@ -28,5 +25,4 @@ function MetricCard({ title, value, type = 'number', unit, icon, trend }) {
     </article>
   );
 }
-
 export default MetricCard;

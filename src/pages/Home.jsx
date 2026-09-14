@@ -1,5 +1,4 @@
 ﻿import { Link } from 'react-router-dom';
-
 function Home() {
   return (
     <main className="page-shell page-shell--narrow">
@@ -18,5 +17,4 @@ function Home() {
     </main>
   );
 }
-
 export default Home;

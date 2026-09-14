@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
-
 Object.defineProperty(window, 'localStorage', {
   value: {
     getItem: vi.fn(() => null), 

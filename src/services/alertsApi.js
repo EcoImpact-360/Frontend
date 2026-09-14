@@ -1,9 +1,4 @@
 import { request } from "./apiClient";
-
-// El backend expone datos de dominio crudos (aula, tipo de residuo, kg,
-// tipo de alerta). Esta capa los traduce al modelo de presentacion que ya
-// esperan AlertCard/AlertBadge/Alerts.jsx (title, message, severity,
-// category, location...), para no tener que tocar esos componentes.
 const ALERT_TYPE_META = {
   THRESHOLD_EXCEEDED: {
     title: "Umbral de residuos superado",
@@ -18,11 +13,9 @@ const ALERT_TYPE_META = {
     severity: "medium",
   },
 };
-
 function toUiAlert(raw) {
   const meta = ALERT_TYPE_META[raw.alertType] || { title: "Alerta", severity: "medium" };
   const kgLabel = typeof raw.totalKg === "number" ? `${raw.totalKg} kg` : null;
-
   return {
     id: raw.id,
     title: meta.title,
@@ -35,12 +28,10 @@ function toUiAlert(raw) {
     resolved: Boolean(raw.resolved),
   };
 }
-
 export async function getAlerts() {
   const data = await request("/alerts/history", { method: "GET" });
   return Array.isArray(data) ? data.map(toUiAlert) : [];
 }
-
 export async function resolveAlert(id) {
   await request(`/alerts/${id}/resolve`, { method: "PATCH" });
   return { id, resolved: true };

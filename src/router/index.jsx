@@ -2,7 +2,6 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 import AlertsPage from '../pages/Alerts';
-
 function NotFound() {
   return (
     <main className="page-shell page-shell--narrow">
@@ -14,7 +13,6 @@ function NotFound() {
     </main>
   );
 }
-
 function Router() {
   return (
     <Routes>
@@ -25,5 +23,4 @@ function Router() {
     </Routes>
   );
 }
-
 export default Router;

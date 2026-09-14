@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-
 export default function ResolveAlertModal({
   open,
   alert,
@@ -9,34 +8,27 @@ export default function ResolveAlertModal({
 }) {
   const cancelRef = useRef(null);
   const confirmRef = useRef(null);
-
   useEffect(() => {
     if (open && confirmRef.current) {
       confirmRef.current.focus();
     }
   }, [open]);
-
   if (!open || !alert) {
     return null;
   }
-
   const handleKeyDown = (event) => {
     if (event.key === 'Escape') {
       onClose();
       return;
     }
-
     if (event.key !== 'Tab') {
       return;
     }
-
     const cancelEl = cancelRef.current;
     const confirmEl = confirmRef.current;
-
     if (!cancelEl || !confirmEl) {
       return;
     }
-
     if (event.shiftKey) {
       if (document.activeElement === confirmEl) {
         event.preventDefault();
@@ -47,7 +39,6 @@ export default function ResolveAlertModal({
       }
       return;
     }
-
     if (document.activeElement === cancelEl) {
       event.preventDefault();
       confirmEl.focus();
@@ -56,7 +47,6 @@ export default function ResolveAlertModal({
       cancelEl.focus();
     }
   };
-
   return (
     <div onClick={onClose} role="presentation" className="modal-overlay">
       <div
@@ -72,7 +62,6 @@ export default function ResolveAlertModal({
         <p className="modal-copy">
           Estas seguro de que deseas marcar la alerta <strong>"{alert.title}"</strong> como resuelta?
         </p>
-
         <div className="modal-actions">
           <button
             type="button"

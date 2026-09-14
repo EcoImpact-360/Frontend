@@ -1,10 +1,8 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
 function LineChartComponent({ data, dataKey, xAxisKey = 'name', title }) {
   if (!data || data.length === 0) {
     return <div className="alerts-state">No hay datos historicos disponibles</div>;
   }
-
   return (
     <section className="surface-card chart-card">
       {title && <h3 className="chart-card__title">{title}</h3>}
@@ -33,5 +31,4 @@ function LineChartComponent({ data, dataKey, xAxisKey = 'name', title }) {
     </section>
   );
 }
-
 export default LineChartComponent;
