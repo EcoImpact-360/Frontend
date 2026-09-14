@@ -163,6 +163,20 @@ a {
 .btn-secondary:hover {
   background: #eef4fb;
 }
+.alerts-btn--danger {
+  background: linear-gradient(135deg, #e53935, #c62828);
+  box-shadow: 0 8px 20px rgba(198, 40, 40, 0.24);
+  color: #ffffff;
+}
+.alerts-btn-secondary.alerts-btn--danger {
+  background: #ffffff;
+  border-color: #e2a0a0;
+  color: #c62828;
+  box-shadow: none;
+}
+.alerts-btn-secondary.alerts-btn--danger:hover {
+  background: #fdf1f1;
+}
 .alerts-btn:disabled,
 .alerts-btn-secondary:disabled,
 .btn:disabled {
@@ -400,6 +414,9 @@ a {
 }
 .alert-card__action {
   margin-top: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
 }
 .alert-badge {
   border-radius: 999px;
@@ -423,6 +440,20 @@ a {
 .modal-card {
   width: min(420px, 100%);
   padding: 1.35rem;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.alerts-form-error {
+  margin: 0;
+  color: #c62828;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 .modal-title {
   margin: 0;

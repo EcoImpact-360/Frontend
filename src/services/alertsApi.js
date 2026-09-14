@@ -18,14 +18,18 @@ function toUiAlert(raw) {
   const kgLabel = typeof raw.totalKg === "number" ? `${raw.totalKg} kg` : null;
   return {
     id: raw.id,
-    title: meta.title,
-    message: [raw.wasteTypeName, kgLabel].filter(Boolean).join(" — ") || meta.title,
+    title: raw.title || meta.title,
+    message: raw.message || [raw.wasteTypeName, kgLabel].filter(Boolean).join(" — ") || meta.title,
     severity: meta.severity,
     category: raw.wasteTypeName || null,
     location: raw.classroomName || null,
     assignedTo: null,
     createdAt: raw.createdAt,
     resolved: Boolean(raw.resolved),
+    classroomId: raw.classroomId,
+    wasteTypeId: raw.wasteTypeId,
+    alertType: raw.alertType,
+    totalKg: raw.totalKg,
   };
 }
 export async function getAlerts() {
@@ -35,4 +39,16 @@ export async function getAlerts() {
 export async function resolveAlert(id) {
   await request(`/alerts/${id}/resolve`, { method: "PATCH" });
   return { id, resolved: true };
+}
+export async function createAlert(payload) {
+  const data = await request("/alerts", { method: "POST", body: payload });
+  return toUiAlert(data);
+}
+export async function updateAlert(id, payload) {
+  const data = await request(`/alerts/${id}`, { method: "PUT", body: payload });
+  return toUiAlert(data);
+}
+export async function deleteAlert(id) {
+  await request(`/alerts/${id}`, { method: "DELETE" });
+  return { id };
 }

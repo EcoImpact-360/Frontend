@@ -2,8 +2,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AlertCard from '../components/alerts/AlertCard';
 import ResolveAlertModal from '../components/alerts/ResolveAlertModal';
+import AlertFormModal from '../components/alerts/AlertFormModal';
+import DeleteAlertModal from '../components/alerts/DeleteAlertModal';
 import Toast from '../components/alerts/Toast';
-import { getAlerts, resolveAlert } from '../services/alertsApi';
+import { getAlerts, resolveAlert, createAlert, updateAlert, deleteAlert } from '../services/alertsApi';
+import { getClassrooms, getWasteTypes } from '../services/catalogApi';
 const SEVERITY_ORDER = {
   high: 3,
   medium: 2,
@@ -26,6 +29,12 @@ export default function Alerts() {
   const [severityFilter, setSeverityFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('recent');
+  const [classrooms, setClassrooms] = useState([]);
+  const [wasteTypes, setWasteTypes] = useState([]);
+  const [formModal, setFormModal] = useState({ open: false, mode: 'create', alert: null });
+  const [isSavingAlert, setIsSavingAlert] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const toastTimeoutRef = useRef(null);
   const showToast = (type, message) => {
     setToast({ type, message });
@@ -62,8 +71,71 @@ export default function Alerts() {
       isActive = false;
     };
   }, [reloadToken]);
+  useEffect(() => {
+    let isActive = true;
+    Promise.all([getClassrooms(), getWasteTypes()])
+      .then(([classroomsData, wasteTypesData]) => {
+        if (!isActive) return;
+        setClassrooms(Array.isArray(classroomsData) ? classroomsData : []);
+        setWasteTypes(Array.isArray(wasteTypesData) ? wasteTypesData : []);
+      })
+      .catch(() => {
+        /* si falla, el formulario de creacion simplemente no tendra opciones */
+      });
+    return () => {
+      isActive = false;
+    };
+  }, []);
   const handleOpenResolve = (alert) => {
     setSelectedAlert(alert);
+  };
+  const handleOpenCreate = () => {
+    setFormModal({ open: true, mode: 'create', alert: null });
+  };
+  const handleOpenEdit = (alert) => {
+    setFormModal({ open: true, mode: 'edit', alert });
+  };
+  const handleCloseForm = () => {
+    if (isSavingAlert) return;
+    setFormModal({ open: false, mode: 'create', alert: null });
+  };
+  const handleSubmitForm = async (payload) => {
+    setIsSavingAlert(true);
+    try {
+      if (formModal.mode === 'edit' && formModal.alert) {
+        await updateAlert(formModal.alert.id, payload);
+        showToast('success', 'Alerta actualizada correctamente.');
+      } else {
+        await createAlert(payload);
+        showToast('success', 'Alerta creada correctamente.');
+      }
+      const data = await getAlerts();
+      const payloadAlerts = Array.isArray(data) ? data : [];
+      setAlerts(payloadAlerts);
+      setStatus(payloadAlerts.length ? 'success' : 'empty');
+      setFormModal({ open: false, mode: 'create', alert: null });
+    } finally {
+      setIsSavingAlert(false);
+    }
+  };
+  const handleOpenDelete = (alert) => {
+    setDeleteTarget(alert);
+  };
+  const handleConfirmDelete = async (id) => {
+    setIsDeleting(true);
+    try {
+      await deleteAlert(id);
+      const data = await getAlerts();
+      const payloadAlerts = Array.isArray(data) ? data : [];
+      setAlerts(payloadAlerts);
+      setStatus(payloadAlerts.length ? 'success' : 'empty');
+      showToast('success', 'Alerta eliminada correctamente.');
+    } catch (err) {
+      showToast('error', err?.message || 'No se pudo eliminar la alerta.');
+    } finally {
+      setIsDeleting(false);
+      setDeleteTarget(null);
+    }
   };
   const handleConfirmResolve = async () => {
     if (!selectedAlert) return;
@@ -167,6 +239,9 @@ export default function Alerts() {
           <button className="alerts-btn-secondary" onClick={handleResolveVisible} disabled={isResolving || status === 'loading'}>
             Resolver visibles
           </button>
+          <button className="alerts-btn-secondary" onClick={handleOpenCreate}>
+            Nueva alerta
+          </button>
           <button className="alerts-btn" onClick={() => setReloadToken((t) => t + 1)} disabled={status === 'loading'}>
             Actualizar
           </button>
@@ -250,7 +325,14 @@ export default function Alerts() {
       {status === 'success' && filteredAlerts.length > 0 && (
         <section className="alerts-list">
           {filteredAlerts.map((alert) => (
-            <AlertCard key={alert.id} alert={alert} disabled={isResolving} onResolve={handleOpenResolve} />
+            <AlertCard
+              key={alert.id}
+              alert={alert}
+              disabled={isResolving}
+              onResolve={handleOpenResolve}
+              onEdit={handleOpenEdit}
+              onDelete={handleOpenDelete}
+            />
           ))}
         </section>
       )}
@@ -260,6 +342,24 @@ export default function Alerts() {
         loading={isResolving}
         onClose={() => !isResolving && setSelectedAlert(null)}
         onConfirm={handleConfirmResolve}
+      />
+      <AlertFormModal
+        key={`${formModal.mode}-${formModal.alert?.id ?? 'new'}`}
+        open={formModal.open}
+        mode={formModal.mode}
+        initialValues={formModal.alert}
+        classrooms={classrooms}
+        wasteTypes={wasteTypes}
+        loading={isSavingAlert}
+        onClose={handleCloseForm}
+        onSubmit={handleSubmitForm}
+      />
+      <DeleteAlertModal
+        open={Boolean(deleteTarget)}
+        alert={deleteTarget}
+        loading={isDeleting}
+        onClose={() => !isDeleting && setDeleteTarget(null)}
+        onConfirm={handleConfirmDelete}
       />
     </main>
   );

@@ -57,4 +57,27 @@ describe('AlertCard Component', () => {
     render(<AlertCard alert={mockAlert} />);
     expect(screen.getByText(/2026/)).toBeInTheDocument();
   });
+  test('no debe mostrar los botones "Editar" ni "Eliminar" si no se pasan los handlers', () => {
+    render(<AlertCard alert={mockAlert} />);
+    expect(screen.queryByRole('button', { name: /Editar/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Eliminar/i })).not.toBeInTheDocument();
+  });
+  test('debe llamar a onEdit con la alerta al hacer clic en "Editar"', () => {
+    const mockOnEdit = vi.fn();
+    render(<AlertCard alert={mockAlert} onEdit={mockOnEdit} />);
+    fireEvent.click(screen.getByRole('button', { name: /Editar/i }));
+    expect(mockOnEdit).toHaveBeenCalledWith(mockAlert);
+  });
+  test('debe llamar a onDelete con la alerta al hacer clic en "Eliminar"', () => {
+    const mockOnDelete = vi.fn();
+    render(<AlertCard alert={mockAlert} onDelete={mockOnDelete} />);
+    fireEvent.click(screen.getByRole('button', { name: /Eliminar/i }));
+    expect(mockOnDelete).toHaveBeenCalledWith(mockAlert);
+  });
+  test('debe seguir mostrando "Editar" y "Eliminar" aunque la alerta ya este resuelta', () => {
+    const resolvedAlert = { ...mockAlert, resolved: true };
+    render(<AlertCard alert={resolvedAlert} onEdit={vi.fn()} onDelete={vi.fn()} />);
+    expect(screen.getByRole('button', { name: /Editar/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Eliminar/i })).toBeInTheDocument();
+  });
 });

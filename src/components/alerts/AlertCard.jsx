@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AlertBadge from './AlertBadge';
-export default function AlertCard({ alert, onResolve, disabled }) {
+export default function AlertCard({ alert, onResolve, onEdit, onDelete, disabled }) {
   const isResolved = Boolean(alert.resolved);
   const statusLabel = isResolved ? 'Resuelta' : 'Pendiente';
   const [isResolving, setIsResolving] = useState(false);
@@ -30,8 +30,8 @@ export default function AlertCard({ alert, onResolve, disabled }) {
       <small className="alert-card__date">
         {alert.createdAt ? new Date(alert.createdAt).toLocaleString() : 'Fecha no disponible'}
       </small>
-      {!isResolved && (
-        <div className="alert-card__action">
+      <div className="alert-card__action">
+        {!isResolved && (
           <button
             type="button"
             className="alerts-btn"
@@ -40,8 +40,28 @@ export default function AlertCard({ alert, onResolve, disabled }) {
           >
             {isResolving ? 'Procesando...' : 'Resolver'}
           </button>
-        </div>
-      )}
+        )}
+        {onEdit && (
+          <button
+            type="button"
+            className="alerts-btn-secondary"
+            onClick={() => onEdit(alert)}
+            disabled={disabled || !alert.id}
+          >
+            Editar
+          </button>
+        )}
+        {onDelete && (
+          <button
+            type="button"
+            className="alerts-btn-secondary alerts-btn--danger"
+            onClick={() => onDelete(alert)}
+            disabled={disabled || !alert.id}
+          >
+            Eliminar
+          </button>
+        )}
+      </div>
     </article>
   );
 }
